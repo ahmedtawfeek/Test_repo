@@ -1,0 +1,1698 @@
+-- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: bities-filez
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.28-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `active_sessions`
+--
+
+DROP TABLE IF EXISTS `active_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `active_sessions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(191) DEFAULT NULL,
+  `token` varchar(191) DEFAULT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `active_sessions_session_id_index` (`session_id`),
+  KEY `active_sessions_token_index` (`token`),
+  KEY `active_sessions_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `active_sessions`
+--
+
+LOCK TABLES `active_sessions` WRITE;
+/*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bans`
+--
+
+DROP TABLE IF EXISTS `bans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bannable_type` varchar(191) NOT NULL,
+  `bannable_id` bigint(20) unsigned NOT NULL,
+  `created_by_type` varchar(191) DEFAULT NULL,
+  `created_by_id` bigint(20) unsigned DEFAULT NULL,
+  `comment` text DEFAULT NULL,
+  `expired_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bans_bannable_type_bannable_id_index` (`bannable_type`,`bannable_id`),
+  KEY `bans_created_by_type_created_by_id_index` (`created_by_type`,`created_by_id`),
+  KEY `bans_expired_at_index` (`expired_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bans`
+--
+
+LOCK TABLES `bans` WRITE;
+/*!40000 ALTER TABLE `bans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `billing_plans`
+--
+
+DROP TABLE IF EXISTS `billing_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `billing_plans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `amount` decimal(13,2) DEFAULT NULL,
+  `currency` varchar(191) NOT NULL,
+  `currency_symbol` varchar(191) NOT NULL DEFAULT '$',
+  `interval` varchar(191) NOT NULL DEFAULT 'month',
+  `interval_count` int(11) NOT NULL DEFAULT 1,
+  `parent_id` int(11) DEFAULT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `uuid` char(36) NOT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `recommended` tinyint(1) NOT NULL DEFAULT 0,
+  `free` tinyint(1) NOT NULL DEFAULT 0,
+  `show_permissions` tinyint(1) NOT NULL DEFAULT 0,
+  `features` text DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `hidden` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `billing_plans_hidden_index` (`hidden`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `billing_plans`
+--
+
+LOCK TABLES `billing_plans` WRITE;
+/*!40000 ALTER TABLE `billing_plans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `billing_plans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comment_reports`
+--
+
+DROP TABLE IF EXISTS `comment_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comment_reports` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `reason` varchar(191) DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `comment_id` bigint(20) unsigned DEFAULT NULL,
+  `user_ip` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `comment_reports_user_id_index` (`user_id`),
+  KEY `comment_reports_comment_id_index` (`comment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comment_reports`
+--
+
+LOCK TABLES `comment_reports` WRITE;
+/*!40000 ALTER TABLE `comment_reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comment_reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comment_votes`
+--
+
+DROP TABLE IF EXISTS `comment_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comment_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vote_type` varchar(10) NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `comment_id` int(10) unsigned NOT NULL,
+  `user_ip` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `comment_votes_user_ip_comment_id_unique` (`user_ip`,`comment_id`),
+  UNIQUE KEY `comment_votes_user_id_comment_id_unique` (`user_id`,`comment_id`),
+  KEY `comment_votes_user_id_index` (`user_id`),
+  KEY `comment_votes_comment_id_index` (`comment_id`),
+  KEY `comment_votes_user_ip_index` (`user_ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comment_votes`
+--
+
+LOCK TABLES `comment_votes` WRITE;
+/*!40000 ALTER TABLE `comment_votes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comment_votes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `path` varchar(191) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `commentable_id` int(10) unsigned NOT NULL,
+  `commentable_type` varchar(30) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `upvotes` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `downvotes` bigint(20) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `comments_parent_id_index` (`parent_id`),
+  KEY `comments_path_index` (`path`),
+  KEY `comments_user_id_index` (`user_id`),
+  KEY `comments_commentable_id_index` (`commentable_id`),
+  KEY `comments_commentable_type_index` (`commentable_type`),
+  KEY `comments_deleted_index` (`deleted`),
+  KEY `comments_upvotes_index` (`upvotes`),
+  KEY `comments_downvotes_index` (`downvotes`),
+  KEY `comments_created_at_index` (`created_at`),
+  KEY `comments_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comments`
+--
+
+LOCK TABLES `comments` WRITE;
+/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `css_themes`
+--
+
+DROP TABLE IF EXISTS `css_themes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `css_themes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `is_dark` tinyint(1) NOT NULL DEFAULT 0,
+  `default_light` tinyint(1) NOT NULL DEFAULT 0,
+  `default_dark` tinyint(1) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL,
+  `values` text NOT NULL,
+  `font` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `css_themes_name_unique` (`name`),
+  KEY `css_themes_default_light_index` (`default_light`),
+  KEY `css_themes_default_dark_index` (`default_dark`),
+  KEY `css_themes_user_id_index` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `css_themes`
+--
+
+LOCK TABLES `css_themes` WRITE;
+/*!40000 ALTER TABLE `css_themes` DISABLE KEYS */;
+INSERT INTO `css_themes` VALUES (1,'Dark',1,0,1,1,'{\"--be-foreground-base\":\"255 255 255\",\"--be-primary-light\":\"239 246 255\",\"--be-primary\":\"191 219 254\",\"--be-primary-dark\":\"147 197 253\",\"--be-on-primary\":\"56 30 114\",\"--be-background\":\"23 23 26\",\"--be-background-alt\":\"34 34 38\",\"--be-background-chip\":\"66 68 74\",\"--be-paper\":\"36 37 40\",\"--be-disabled-bg-opacity\":\"12%\",\"--be-disabled-fg-opacity\":\"30%\",\"--be-hover-opacity\":\"8%\",\"--be-focus-opacity\":\"12%\",\"--be-selected-opacity\":\"16%\",\"--be-text-main-opacity\":\"100%\",\"--be-text-muted-opacity\":\"70%\",\"--be-divider-opacity\":\"12%\"}',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19'),(2,'Light',0,1,0,1,'{\"--be-foreground-base\":\"0 0 0\",\"--be-primary-light\":\"191 219 254\",\"--be-primary\":\"59 130 246\",\"--be-primary-dark\":\"37 99 235\",\"--be-on-primary\":\"255 255 255\",\"--be-background\":\"255 255 255\",\"--be-background-alt\":\"246 248 250\",\"--be-background-chip\":\"233 236 239\",\"--be-paper\":\"255 255 255\",\"--be-disabled-bg-opacity\":\"12%\",\"--be-disabled-fg-opacity\":\"26%\",\"--be-hover-opacity\":\"4%\",\"--be-focus-opacity\":\"12%\",\"--be-selected-opacity\":\"8%\",\"--be-text-main-opacity\":\"87%\",\"--be-text-muted-opacity\":\"60%\",\"--be-divider-opacity\":\"12%\"}',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19');
+/*!40000 ALTER TABLE `css_themes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `csv_exports`
+--
+
+DROP TABLE IF EXISTS `csv_exports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `csv_exports` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `cache_name` varchar(50) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `download_name` varchar(50) NOT NULL,
+  `uuid` char(36) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `csv_exports_cache_name_unique` (`cache_name`),
+  KEY `csv_exports_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `csv_exports`
+--
+
+LOCK TABLES `csv_exports` WRITE;
+/*!40000 ALTER TABLE `csv_exports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `csv_exports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `custom_domains`
+--
+
+DROP TABLE IF EXISTS `custom_domains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `custom_domains` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `host` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `global` tinyint(1) NOT NULL DEFAULT 0,
+  `resource_id` int(10) unsigned DEFAULT NULL,
+  `resource_type` varchar(20) DEFAULT NULL,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `custom_domains_host_unique` (`host`),
+  KEY `custom_domains_user_id_index` (`user_id`),
+  KEY `custom_domains_created_at_index` (`created_at`),
+  KEY `custom_domains_updated_at_index` (`updated_at`),
+  KEY `custom_domains_global_index` (`global`),
+  KEY `custom_domains_resource_id_index` (`resource_id`),
+  KEY `custom_domains_resource_type_index` (`resource_type`),
+  KEY `custom_domains_workspace_id_index` (`workspace_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `custom_domains`
+--
+
+LOCK TABLES `custom_domains` WRITE;
+/*!40000 ALTER TABLE `custom_domains` DISABLE KEYS */;
+/*!40000 ALTER TABLE `custom_domains` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `custom_pages`
+--
+
+DROP TABLE IF EXISTS `custom_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `custom_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) DEFAULT NULL,
+  `body` longtext NOT NULL,
+  `slug` varchar(191) NOT NULL,
+  `meta` text DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'default',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `hide_nav` tinyint(1) NOT NULL DEFAULT 0,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pages_slug_unique` (`slug`),
+  KEY `pages_type_index` (`type`),
+  KEY `pages_user_id_index` (`user_id`),
+  KEY `custom_pages_workspace_id_index` (`workspace_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `custom_pages`
+--
+
+LOCK TABLES `custom_pages` WRITE;
+/*!40000 ALTER TABLE `custom_pages` DISABLE KEYS */;
+INSERT INTO `custom_pages` VALUES (1,'Example Privacy Policy','<p>Welcome to BeDrive (\"us\", \"we\", or \"our\"). At http://127.0.0.1:8000, we value your privacy and strive to protect your personal information. This Privacy Policy outlines the types of data we collect, how we use and protect it, and your rights regarding your personal information.</p>\r\n<h2>Information We Collect</h2>\r\n<p>We may collect various types of information from you, including:</p>\r\n<ol>\r\n  <li><strong>Personal Information:</strong> When you register for an account, place an order, subscribe to our newsletter, or interact with our website, we may collect personal information such as your name, email address, postal address, phone number, and payment information.</li>\r\n  <li><strong>Usage Data:</strong> We may automatically collect information about how you use our website, including your IP address, browser type, operating system, referring URLs, access times, and pages viewed.</li>\r\n  <li><strong>Cookies and Tracking Technologies:</strong> We use cookies and similar tracking technologies to enhance your browsing experience and collect data about your interactions with our website.</li>\r\n</ol>\r\n<h2>How We Use Your Information</h2>\r\n<p>We use the collected information for various purposes, including:</p>\r\n<ol>\r\n  <li>Providing and improving our services to you.</li>\r\n  <li>Processing your orders and payments.</li>\r\n  <li>Sending you newsletters and promotional materials.</li>\r\n  <li>Analyzing website usage and trends to enhance user experience.</li>\r\n  <li>Responding to your inquiries and providing customer support.</li>\r\n  <li>Protecting our legal rights and preventing fraud.</li>\r\n</ol>\r\n<h2>Data Sharing and Disclosure</h2>\r\n<p>We may share your personal information with:</p>\r\n<ol>\r\n  <li>Third-party service providers who assist us in operating our website and delivering services to you.</li>\r\n  <li>Legal authorities when required by law or to protect our rights and safety.</li>\r\n</ol>\r\n<p>We do not sell, rent, or trade your personal information to third parties for marketing purposes.</p>\r\n<h2>Your Rights</h2>\r\n<p>You have the right to:</p>\r\n<ol>\r\n  <li>Access, correct, or delete your personal information.</li>\r\n  <li>Withdraw your consent for processing your data.</li>\r\n  <li>Object to processing of your personal data.</li>\r\n  <li>Lodge a complaint with a supervisory authority.</li>\r\n</ol>\r\n<h2>Security</h2>\r\n<p>We take reasonable measures to protect your personal information from unauthorized access, alteration, or disclosure. However, no data transmission over the internet or storage system can be guaranteed to be 100% secure.</p>\r\n<h2>Children\'s Privacy</h2>\r\n<p>Our services are not intended for children under the age of 13. We do not knowingly collect or maintain personal information from children.</p>\r\n<h2>Changes to This Privacy Policy</h2>\r\n<p>We may update our Privacy Policy from time to time. Any changes will be posted on this page, and the \"Last updated\" date will be revised accordingly.</p>\r\n<h2>Contact Us</h2>\r\n<p>If you have any questions, concerns, or requests regarding your personal information or our Privacy Policy, please contact us at <a href=\"mailto:\"></a>.</p>\r\n','privacy-policy',NULL,'default','2024-09-29 19:19:19','2024-09-29 19:19:19',NULL,0,NULL),(2,'Example Terms of Service','<p>\r\n  Welcome to BeDrive (\"us\", \"we\", or \"our\"). By accessing and using our website, you agree to\r\n  comply with and be bound by the following Terms of Service. Please read these terms carefully\r\n  before using our services.\r\n</p>\r\n<h2>1. Acceptance of Terms</h2>\r\n<p>\r\n  By using our website, you acknowledge that you have read, understood, and agree to abide by these\r\n  Terms of Service. If you do not agree with these terms, please do not use our services.\r\n</p>\r\n<h2>2. Use of Our Services</h2>\r\n<p>\r\n  You may use our website and services only for lawful purposes and in compliance with all\r\n  applicable laws and regulations. You agree not to engage in any activity that may disrupt or\r\n  interfere with the functioning of our website.\r\n</p>\r\n<h2>3. User Accounts</h2>\r\n<p>\r\n  If you create an account on our website, you are responsible for maintaining the confidentiality\r\n  of your account information and password. You agree to notify us immediately of any unauthorized\r\n  use of your account.\r\n</p>\r\n<h2>4. Content</h2>\r\n<p>\r\n  Any content you submit to our website, including text, images, and other materials, must comply\r\n  with our content guidelines. You retain ownership of your content, but you grant us a\r\n  non-exclusive, royalty-free license to use, reproduce, and distribute your content on our\r\n  platform.\r\n</p>\r\n<h2>5. Intellectual Property</h2>\r\n<p>\r\n  Unless otherwise stated, all content and materials on our website are the property of [Website\r\n  Name] and are protected by copyright, trademark, and other intellectual property laws.\r\n</p>\r\n<h2>6. Disclaimer of Warranties</h2>\r\n<p>\r\n  Our website is provided \"as is\" and \"as available\" without any warranties of any kind, whether\r\n  express or implied. We do not guarantee the accuracy, completeness, or reliability of any content\r\n  or materials on our website.\r\n</p>\r\n<h2>7. Limitation of Liability</h2>\r\n<p>\r\n  We shall not be liable for any indirect, incidental, special, consequential, or punitive damages\r\n  arising out of or relating to your use of our website.\r\n</p>\r\n<h2>8. Governing Law</h2>\r\n<p>\r\n  These Terms of Service shall be governed by and construed in accordance with the laws of [Your\r\n  Country/State], without regard to its conflict of law principles.\r\n</p>\r\n<h2>9. Changes to Terms</h2>\r\n<p>\r\n  We reserve the right to modify or update these Terms of Service at any time. It is your\r\n  responsibility to review these terms periodically. Your continued use of our website after any\r\n  changes signifies your acceptance of the modified terms.\r\n</p>\r\n<h2>10. Contact Us</h2>\r\n<p>\r\n  If you have any questions or concerns regarding these Terms of Service, please contact us at\r\n  <a href=\"mailto:\"></a>.\r\n</p>\r\n','terms-of-service',NULL,'default','2024-09-29 19:19:19','2024-09-29 19:19:19',NULL,0,NULL),(3,'Example About Us','<p>The standard Lorem Ipsum passage, used since the 1500s\r\n    \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"</p>\r\n\r\n<p>Section 1.10.32 of \"de Finibus Bonorum et Malorum\", written by Cicero in 45 BC\r\n    \"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\"</p>\r\n\r\n<p>1914 translation by H. Rackham\r\n    \"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?\"</p>\r\n\r\n<p>Section 1.10.33 of \"de Finibus Bonorum et Malorum\", written by Cicero in 45 BC\r\n    \"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.\"</p>\r\n\r\n<p>1914 translation by H. Rackham\r\n    \"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.\"</p>','about-us',NULL,'default','2024-09-29 19:19:19','2024-09-29 19:19:19',NULL,0,NULL);
+/*!40000 ALTER TABLE `custom_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(191) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_jobs`
+--
+
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fcm_tokens`
+--
+
+DROP TABLE IF EXISTS `fcm_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fcm_tokens` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `device_id` varchar(40) NOT NULL,
+  `token` varchar(180) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fcm_tokens_device_id_user_id_unique` (`device_id`,`user_id`),
+  KEY `fcm_tokens_device_id_index` (`device_id`),
+  KEY `fcm_tokens_token_index` (`token`),
+  KEY `fcm_tokens_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fcm_tokens`
+--
+
+LOCK TABLES `fcm_tokens` WRITE;
+/*!40000 ALTER TABLE `fcm_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fcm_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_entries`
+--
+
+DROP TABLE IF EXISTS `file_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file_entries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `description` varchar(150) DEFAULT NULL,
+  `file_name` varchar(50) NOT NULL,
+  `mime` varchar(100) DEFAULT NULL,
+  `file_size` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `user_id` int(11) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `path` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  `disk_prefix` varchar(191) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL,
+  `public` tinyint(1) NOT NULL DEFAULT 0,
+  `preview_token` varchar(15) DEFAULT NULL,
+  `thumbnail` tinyint(1) NOT NULL DEFAULT 0,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  `owner_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `files_user_id_index` (`user_id`),
+  KEY `files_folder_id_index` (`parent_id`),
+  KEY `file_entries_name_index` (`name`),
+  KEY `file_entries_path_index` (`path`),
+  KEY `file_entries_type_index` (`type`),
+  KEY `file_entries_public_index` (`public`),
+  KEY `file_entries_description_index` (`description`),
+  KEY `file_entries_workspace_id_index` (`workspace_id`),
+  KEY `file_entries_owner_id_index` (`owner_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_entries`
+--
+
+LOCK TABLES `file_entries` WRITE;
+/*!40000 ALTER TABLE `file_entries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_entry_models`
+--
+
+DROP TABLE IF EXISTS `file_entry_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file_entry_models` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `file_entry_id` int(10) unsigned NOT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `model_type` varchar(60) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `owner` tinyint(1) NOT NULL DEFAULT 0,
+  `permissions` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uploadable_unique` (`file_entry_id`,`model_id`,`model_type`),
+  KEY `file_entry_models_owner_index` (`owner`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_entry_models`
+--
+
+LOCK TABLES `file_entry_models` WRITE;
+/*!40000 ALTER TABLE `file_entry_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_entry_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `folders`
+--
+
+DROP TABLE IF EXISTS `folders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `folders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `description` varchar(150) DEFAULT NULL,
+  `path` text DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `folder_id` int(11) DEFAULT NULL,
+  `share_id` varchar(20) NOT NULL,
+  `password` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `folders_user_id_index` (`user_id`),
+  KEY `folders_share_id_index` (`share_id`),
+  KEY `folders_folder_id_index` (`folder_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `folders`
+--
+
+LOCK TABLES `folders` WRITE;
+/*!40000 ALTER TABLE `folders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `folders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `follows`
+--
+
+DROP TABLE IF EXISTS `follows`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `follows` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `follower_id` int(11) NOT NULL,
+  `followed_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `follows_follower_id_followed_id_unique` (`follower_id`,`followed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `follows`
+--
+
+LOCK TABLES `follows` WRITE;
+/*!40000 ALTER TABLE `follows` DISABLE KEYS */;
+/*!40000 ALTER TABLE `follows` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoices`
+--
+
+DROP TABLE IF EXISTS `invoices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subscription_id` int(11) NOT NULL,
+  `paid` tinyint(1) NOT NULL,
+  `uuid` varchar(36) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `notified` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invoices_subscription_id_index` (`subscription_id`),
+  KEY `invoices_uuid_index` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoices`
+--
+
+LOCK TABLES `invoices` WRITE;
+/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(191) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_reserved_at_index` (`queue`,`reserved_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs`
+--
+
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `localizations`
+--
+
+DROP TABLE IF EXISTS `localizations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `localizations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `language` varchar(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `localizations_name_index` (`name`),
+  KEY `localizations_language_index` (`language`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `localizations`
+--
+
+LOCK TABLES `localizations` WRITE;
+/*!40000 ALTER TABLE `localizations` DISABLE KEYS */;
+INSERT INTO `localizations` VALUES (1,'English','2024-09-29 19:19:19','2024-09-29 19:19:19','en');
+/*!40000 ALTER TABLE `localizations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(191) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2014_10_12_200000_add_two_factor_columns_to_users_table',1),(4,'2015_04_127_156842_create_social_profiles_table',1),(5,'2015_04_13_140047_create_files_models_table',1),(6,'2015_04_18_134312_create_folders_table',1),(7,'2015_05_29_131549_create_settings_table',1),(8,'2015_10_23_164355_create_follows_table',1),(9,'2016_04_06_140017_add_folder_id_index_to_files_table',1),(10,'2016_05_12_190852_create_tags_table',1),(11,'2016_05_12_190958_create_taggables_table',1),(12,'2016_05_26_170044_create_uploads_table',1),(13,'2016_05_27_143158_create_uploadables_table',1),(14,'2016_07_14_153703_create_groups_table',1),(15,'2016_07_14_153921_create_user_group_table',1),(16,'2016_10_17_152159_add_space_available_column_to_users_table',1),(17,'2017_07_02_120142_create_pages_table',1),(18,'2017_07_11_122825_create_localizations_table',1),(19,'2017_08_26_131330_add_private_field_to_settings_table',1),(20,'2017_09_17_144728_add_columns_to_users_table',1),(21,'2017_09_17_152854_make_password_column_nullable',1),(22,'2017_09_30_152855_make_settings_value_column_nullable',1),(23,'2017_10_01_152897_add_public_column_to_uploads_table',1),(24,'2017_12_04_132911_add_avatar_column_to_users_table',1),(25,'2018_01_10_140732_create_subscriptions_table',1),(26,'2018_01_10_140746_add_billing_to_users_table',1),(27,'2018_01_10_161706_create_billing_plans_table',1),(28,'2018_06_05_142932_rename_files_table_to_file_entries',1),(29,'2018_06_06_141629_rename_file_entries_table_columns',1),(30,'2018_06_07_141630_merge_files_and_folders_tables',1),(31,'2018_07_03_114346_create_shareable_links_table',1),(32,'2018_07_24_113757_add_available_space_to_billing_plans_table',1),(33,'2018_07_24_124254_add_available_space_to_users_table',1),(34,'2018_07_26_142339_rename_groups_to_roles',1),(35,'2018_07_26_142842_rename_user_role_table_columns_to_roles',1),(36,'2018_08_07_124200_rename_uploads_to_file_entries',1),(37,'2018_08_07_124327_refactor_file_entries_columns',1),(38,'2018_08_07_130653_add_folder_path_column_to_file_entries_table',1),(39,'2018_08_07_140328_delete_legacy_root_folders',1),(40,'2018_08_07_140330_move_folders_into_file_entries_table',1),(41,'2018_08_07_140440_migrate_file_entry_users_to_many_to_many',1),(42,'2018_08_10_142251_update_users_table_to_v2',1),(43,'2018_08_15_132225_move_uploads_into_subfolders',1),(44,'2018_08_16_111525_transform_file_entries_records_to_v2',1),(45,'2018_08_31_104145_rename_uploadables_table',1),(46,'2018_08_31_104325_rename_file_entry_models_table_columns',1),(47,'2018_11_26_171703_add_type_and_title_columns_to_pages_table',1),(48,'2018_12_01_144233_change_unique_index_on_tags_table',1),(49,'2019_02_16_150049_delete_old_seo_settings',1),(50,'2019_02_24_141457_create_jobs_table',1),(51,'2019_03_11_162627_add_preview_token_to_file_entries_table',1),(52,'2019_03_12_160803_add_thumbnail_column_to_file_entries_table',1),(53,'2019_03_16_161836_add_paypal_id_column_to_billing_plans_table',1),(54,'2019_05_14_120930_index_description_column_in_file_entries_table',1),(55,'2019_06_08_120504_create_custom_domains_table',1),(56,'2019_06_13_140318_add_user_id_column_to_pages_table',1),(57,'2019_06_15_114320_rename_pages_table_to_custom_pages',1),(58,'2019_06_18_133933_create_permissions_table',1),(59,'2019_06_18_134203_create_permissionables_table',1),(60,'2019_06_18_135822_rename_permissions_columns',1),(61,'2019_07_08_122001_create_css_themes_table',1),(62,'2019_07_20_141752_create_invoices_table',1),(63,'2019_08_19_121112_add_global_column_to_custom_domains_table',1),(64,'2019_09_13_141123_change_plan_amount_to_float',1),(65,'2019_10_14_171943_add_index_to_username_column',1),(66,'2019_10_20_143522_create_comments_table',1),(67,'2019_10_23_134520_create_notifications_table',1),(68,'2019_11_21_144956_add_resource_id_and_type_to_custom_domains_table',1),(69,'2019_12_14_000001_create_personal_access_tokens_table',1),(70,'2019_12_14_194512_rename_public_path_column_to_disk_prefix',1),(71,'2019_12_24_165237_change_file_size_column_default_value_to_0',1),(72,'2019_12_28_190836_update_file_entry_models_table_to_v2',1),(73,'2019_12_28_191105_move_user_file_entry_table_records_to_file_entry_models',1),(74,'2020_01_26_143733_create_notification_subscriptions_table',1),(75,'2020_03_03_140720_add_language_col_to_localizations_table',1),(76,'2020_03_03_143142_add_lang_code_to_existing_localizations',1),(77,'2020_04_14_163347_add_hidden_column_to_plans_table',1),(78,'2020_06_27_180040_add_verified_at_column_to_users_table',1),(79,'2020_06_27_180253_move_confirmed_column_to_email_verified_at',1),(80,'2020_07_15_144024_fix_issues_with_migration_to_laravel_7',1),(81,'2020_07_22_165126_create_workspaces_table',1),(82,'2020_07_23_145652_create_workspace_invites_table',1),(83,'2020_07_23_164502_create_workspace_user_table',1),(84,'2020_07_26_165349_add_columns_to_roles_table',1),(85,'2020_07_29_141418_add_workspace_id_column_to_workspaceable_models',1),(86,'2020_07_30_152330_add_type_column_to_permissions_table',1),(87,'2020_08_29_165057_add_hide_nav_column_to_custom_pages_table',1),(88,'2020_12_14_155112_create_table_fcm_tokens',1),(89,'2020_12_17_124109_subscribe_users_to_notifications',1),(90,'2021_04_22_172459_add_internal_columm_to_roles_table',1),(91,'2021_05_03_173446_add_deleted_column_to_comments_table',1),(92,'2021_05_12_164940_add_advanced_column_to_permissions_table',1),(93,'2021_06_04_143405_add_workspace_id_col_to_custom_domains_table',1),(94,'2021_06_04_143406_add_workspace_id_col_to_custom_pages_table',1),(95,'2021_06_04_143406_add_workspace_id_col_to_file_entries_table',1),(96,'2021_06_05_182202_create_csv_exports_table',1),(97,'2021_06_18_161030_rename_gateway_col_in_subscriptions_table',1),(98,'2021_06_19_111939_add_owner_id_column_to_file_entries_table',1),(99,'2021_06_19_112035_materialize_owner_id_in_file_entries_table',1),(100,'2021_07_06_144837_migrate_landing_page_config_to_20',1),(101,'2021_07_17_093454_add_created_at_col_to_user_role_table',1),(102,'2021_09_30_123758_slugify_tag_name_column',1),(103,'2021_10_13_132915_add_token_cols_to_social_profiles_table',1),(104,'2022_04_08_122553_change_default_workspace_id_from_null_to_zero',1),(105,'2022_04_23_115027_add_id_to_all_menus',1),(106,'2022_07_30_181012_transform_landing_page_cta',1),(107,'2022_08_10_200344_add_produce_id_column_to_subscriptions_table',1),(108,'2022_08_11_160401_create_prices_table',1),(109,'2022_08_11_170041_create_products_table',1),(110,'2022_08_11_170117_move_billing_plans_to_products_and_prices_tables',1),(111,'2022_08_17_184337_add_card_expires_column_to_users_table',1),(112,'2022_08_24_192127_migrate_common_settings_to_v3',1),(113,'2022_09_03_164633_add_expires_at_column_to_personal_access_tokens_table',1),(114,'2022_09_27_124344_change_available_space_column_to_big_int',1),(115,'2022_09_28_121423_migrate_notif_settings_from_array_to_obj',1),(116,'2022_11_06_115107_increase_file_name_column_length',1),(117,'2023_03_17_175502_add_user_id_to_tags_table',1),(118,'2023_03_17_180355_change_name_index_to_name_user_id_in_tags_table',1),(119,'2023_05_09_124348_create_bans_table',1),(120,'2023_05_09_133514_add_banned_at_column_to_users_table',1),(121,'2023_05_11_200001_add_two_factor_columns_to_users_table',1),(122,'2023_05_13_132948_active_sessions_table',1),(123,'2023_05_16_150805_change_social_profiles_token_length',1),(124,'2023_06_07_000001_create_pulse_tables',1),(125,'2023_06_10_131615_add_pos_and_neg_votes_to_comments_table',1),(126,'2023_06_10_132135_add_comment_ratings_table',1),(127,'2023_06_11_124655_create_comment_reports_table',1),(128,'2023_08_08_103123_add_timestamp_indexes_to_comments_table',1),(129,'2023_08_31_124910_update_model_types_from_namespace_to_string',1),(130,'2023_09_14_172633_create_failed_jobs_table',1),(131,'2023_12_10_124446_upgrade_css_themes_table_to_v3',1),(132,'2023_12_18_141540_add_search_indices_to_users_table',1),(133,'2023_12_19_122804_add_uuid_column_to_failed_jobs_table',1),(134,'2023_12_23_121618_encrypt_secret_settings',1),(135,'2024_02_05_103042_change_avatar_column_to_text',1),(136,'2024_05_08_131134_add_gateway_status_column_to_subscriptions_table',1),(137,'2024_05_08_151815_increase_uuid_column_length_in_invoices_table',1),(138,'2024_05_10_151600_add_paypal_id_to_users_table',1),(139,'2024_05_12_133925_create_schedule_log_table',1),(140,'2024_05_15_123455_create_outgoing_email_log_table',1),(141,'2024_05_16_142030_create_otp_codes_table',1),(142,'2024_05_23_134009_add_logs_menu_item_to_admin_menu',1),(143,'2024_06_05_122254_add_notified_column_to_invoices_table',1),(144,'2024_06_15_123230_create_jobs_table',1),(145,'2025_01_06_150818_create_sns_logs_table',2),(146,'create_user_models_same_db_table',2),(147,'create_user_models_table',2),(148,'create_workspace_models_same_db_table',2),(149,'create_workspace_models_table',2),(150,'create_workspace_users_main_db_table',2),(151,'create_workspace_users_same_dbtable',2),(152,'create_workspaces_main_db_table',2),(153,'create_workspaces_table',2),(154,'update_user_models_table',2),(155,'update_workspace_users_main_db_table',2),(156,'update_workspaces_main_db_table',2),(157,'update_workspaces_table',2);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_subscriptions`
+--
+
+DROP TABLE IF EXISTS `notification_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notification_subscriptions` (
+  `id` char(36) NOT NULL,
+  `notif_id` varchar(5) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `channels` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notification_subscriptions_notif_id_index` (`notif_id`),
+  KEY `notification_subscriptions_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_subscriptions`
+--
+
+LOCK TABLES `notification_subscriptions` WRITE;
+/*!40000 ALTER TABLE `notification_subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notifications` (
+  `id` char(36) NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `notifiable_type` varchar(191) NOT NULL,
+  `notifiable_id` bigint(20) unsigned NOT NULL,
+  `data` text NOT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `otp_codes`
+--
+
+DROP TABLE IF EXISTS `otp_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `otp_codes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(191) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `expires_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `otp_codes_user_id_index` (`user_id`),
+  KEY `otp_codes_expires_at_index` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `otp_codes`
+--
+
+LOCK TABLES `otp_codes` WRITE;
+/*!40000 ALTER TABLE `otp_codes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `otp_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `outgoing_email_log`
+--
+
+DROP TABLE IF EXISTS `outgoing_email_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `outgoing_email_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `message_id` varchar(191) NOT NULL,
+  `status` varchar(191) NOT NULL DEFAULT 'not-sent',
+  `from` varchar(191) NOT NULL,
+  `to` varchar(191) NOT NULL,
+  `subject` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `mime` mediumblob DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `outgoing_email_log_message_id_unique` (`message_id`),
+  KEY `outgoing_email_log_status_index` (`status`),
+  KEY `outgoing_email_log_from_index` (`from`),
+  KEY `outgoing_email_log_to_index` (`to`),
+  KEY `outgoing_email_log_created_at_index` (`created_at`),
+  KEY `outgoing_email_log_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `outgoing_email_log`
+--
+
+LOCK TABLES `outgoing_email_log` WRITE;
+/*!40000 ALTER TABLE `outgoing_email_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `outgoing_email_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password_resets`
+--
+
+DROP TABLE IF EXISTS `password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_resets` (
+  `email` varchar(191) NOT NULL,
+  `token` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+LOCK TABLES `password_resets` WRITE;
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissionables`
+--
+
+DROP TABLE IF EXISTS `permissionables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permissionables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` int(11) NOT NULL,
+  `permissionable_id` int(11) NOT NULL,
+  `permissionable_type` varchar(40) NOT NULL,
+  `restrictions` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissionable_unique` (`permission_id`,`permissionable_id`,`permissionable_type`),
+  KEY `permissionables_permission_id_index` (`permission_id`),
+  KEY `permissionables_permissionable_id_index` (`permissionable_id`),
+  KEY `permissionables_permissionable_type_index` (`permissionable_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissionables`
+--
+
+LOCK TABLES `permissionables` WRITE;
+/*!40000 ALTER TABLE `permissionables` DISABLE KEYS */;
+INSERT INTO `permissionables` VALUES (1,1,1,'user',NULL),(2,4,1,'role','[]'),(3,9,1,'role','[]'),(4,18,1,'role','[]'),(5,22,1,'role','[]'),(6,26,1,'role','[]'),(7,32,1,'role','[]'),(8,37,1,'role','[]'),(9,42,1,'role','[]'),(10,48,1,'role','[]'),(11,49,1,'role','[]'),(12,52,1,'role','[]'),(13,9,2,'role','[]'),(14,22,2,'role','[]'),(15,26,2,'role','[]'),(16,32,2,'role','[]'),(17,37,2,'role','[]'),(18,48,2,'role','[]'),(19,17,3,'role',NULL),(20,18,3,'role',NULL),(21,19,3,'role',NULL),(22,20,3,'role',NULL),(23,21,3,'role',NULL),(24,45,3,'role',NULL),(25,46,3,'role',NULL),(26,47,3,'role',NULL),(27,17,4,'role',NULL),(28,18,4,'role',NULL),(29,19,4,'role',NULL),(30,20,4,'role',NULL),(31,21,4,'role',NULL),(32,17,5,'role',NULL);
+/*!40000 ALTER TABLE `permissionables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `display_name` varchar(191) NOT NULL,
+  `description` text DEFAULT NULL,
+  `group` varchar(30) NOT NULL,
+  `restrictions` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'sitewide',
+  `advanced` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_name_unique` (`name`),
+  KEY `permissions_advanced_index` (`advanced`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+INSERT INTO `permissions` VALUES (1,'admin','Super Admin','Give all permissions to user.','admin',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(2,'admin.access','Access Admin','Required in order to access any admin area page.','admin',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(3,'appearance.update','Update Appearance','Allows access to appearance editor.','admin',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(4,'api.access','Access Api','Required in order for users to be able to use the API.','api',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(5,'roles.view','View Roles','Allow viewing ALL roles, regardless of who is the owner.','roles',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(6,'roles.create','Create Roles','Allow creating new roles, regardless of who is the owner.','roles',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(7,'roles.update','Update Roles','Allow updating ALL roles, regardless of who is the owner.','roles',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(8,'roles.delete','Delete Roles','Allow deleting ALL roles, regardless of who is the owner.','roles',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(9,'custom_pages.view','View Custom Pages','Allow viewing of all pages on the site, regardless of who created them. User can view their own pages without this permission.','custom_pages',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(10,'custom_pages.create','Create Custom Pages','Allow creating new custom pages, regardless of who is the owner.','custom_pages','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of pages user will be able to create. Leave empty for unlimited.\"}]','2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(11,'custom_pages.update','Update Custom Pages','Allow editing of all pages on the site, regardless of who created them. User can edit their own pages without this permission.','custom_pages',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(12,'custom_pages.delete','Delete Custom Pages','Allow deleting of all pages on the site, regardless of who created them. User can delete their own pages without this permission.','custom_pages',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(13,'custom_domains.view','View Custom Domains','Allow viewing all domains on the site, regardless of who created them. User can view their own domains without this permission.','custom_domains',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(14,'custom_domains.create','Create Custom Domains','Allow user to connect their own custom domains.','custom_domains','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of domains user will be able to create. Leave empty for unlimited.\"}]','2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(15,'custom_domains.update','Update Custom Domains','Allow editing all domains on the site, regardless of who created them. User can edit their own domains without this permission.','custom_domains',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(16,'custom_domains.delete','Delete Custom Domains','Allow deleting all domains on the site, regardless of who created them. User can delete their own domains without this permission.','custom_domains',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(17,'files.view','View Files','Allow viewing all uploaded files on the site. Users can view their own uploads without this permission.','files',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(18,'files.create','Create Files','Allow uploading files on the site. This permission is used by any page where it is possible for user to upload files.','files',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(19,'files.update','Update Files','Allow editing all uploaded files on the site. Users can edit their own uploads without this permission.','files',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(20,'files.delete','Delete Files','Allow deleting all uploaded files on the site. Users can delete their own uploads (where applicable) without this permission.','files',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(21,'files.download','Download Files','Allow downloading all uploaded files on the site. Users can download their own uploads (where applicable) without this permission.','files',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(22,'users.view','View Users','Allow viewing user profile pages on the site. User can view their own profile without this permission.','users',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(23,'users.create','Create Users','Allow creating users from admin area. Users can register for new accounts without this permission. Registration can be disabled from settings page.','users',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(24,'users.update','Update Users','Allow editing details of any user on the site. User can edit their own details without this permission.','users',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(25,'users.delete','Delete Users','Allow deleting any user on the site. User can request deletion of their own account without this permission.','users',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(26,'localizations.view','View Localizations','Allow viewing ALL localizations, regardless of who is the owner.','localizations',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(27,'localizations.create','Create Localizations','Allow creating new localizations, regardless of who is the owner.','localizations',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(28,'localizations.update','Update Localizations','Allow updating ALL localizations, regardless of who is the owner.','localizations',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(29,'localizations.delete','Delete Localizations','Allow deleting ALL localizations, regardless of who is the owner.','localizations',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(30,'settings.view','View Settings','Allow viewing ALL settings, regardless of who is the owner.','settings',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(31,'settings.update','Update Settings','Allow updating ALL settings, regardless of who is the owner.','settings',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(32,'plans.view','View Plans','Allow viewing ALL plans, regardless of who is the owner.','plans',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(33,'plans.create','Create Plans','Allow creating new plans, regardless of who is the owner.','plans',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(34,'plans.update','Update Plans','Allow updating ALL plans, regardless of who is the owner.','plans',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(35,'plans.delete','Delete Plans','Allow deleting ALL plans, regardless of who is the owner.','plans',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(36,'invoices.view','View Invoices','Allow viewing ALL invoices, regardless of who is the owner.','invoices',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(37,'tags.view','View Tags','Allow viewing ALL tags, regardless of who is the owner.','tags',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(38,'tags.create','Create Tags','Allow creating new tags, regardless of who is the owner.','tags',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(39,'tags.update','Update Tags','Allow updating ALL tags, regardless of who is the owner.','tags',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(40,'tags.delete','Delete Tags','Allow deleting ALL tags, regardless of who is the owner.','tags',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',1),(41,'workspaces.view','View Workspaces','Allow viewing ALL workspaces, regardless of who is the owner.','workspaces',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(42,'workspaces.create','Create Workspaces','Allow creating new workspaces, regardless of who is the owner.','workspaces','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of workspaces user will be able to create. Leave empty for unlimited.\"},{\"name\":\"member_count\",\"type\":\"number\",\"description\":\"Maximum number of members workspace is allowed to have.\"}]','2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(43,'workspaces.update','Update Workspaces','Allow updating ALL workspaces, regardless of who is the owner.','workspaces',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(44,'workspaces.delete','Delete Workspaces','Allow deleting ALL workspaces, regardless of who is the owner.','workspaces',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(45,'workspace_members.invite','Invite Members','Allow user to invite new members into a workspace.','workspace_members',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','workspace',0),(46,'workspace_members.update','Update Members','Allow user to change role of other members.','workspace_members',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','workspace',0),(47,'workspace_members.delete','Delete Members','Allow user to remove members from workspace.','workspace_members',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','workspace',0),(48,'links.view','View Links','Allow viewing ALL links, regardless of who is the owner.','links',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(49,'links.create','Create Links','Allow creating new links, regardless of who is the owner.','links',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(50,'links.update','Update Links','Allow updating ALL links, regardless of who is the owner.','links',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(51,'links.delete','Delete Links','Allow deleting ALL links, regardless of who is the owner.','links',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0),(52,'notifications.subscribe','Subscribe Notifications','Allows agents to subscribe to various conversation notifications.','notifications',NULL,'2024-09-29 19:19:19','2024-09-29 19:19:19','sitewide',0);
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+DROP TABLE IF EXISTS `personal_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(191) NOT NULL,
+  `tokenable_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `personal_access_tokens`
+--
+
+LOCK TABLES `personal_access_tokens` WRITE;
+/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prices`
+--
+
+DROP TABLE IF EXISTS `prices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `prices` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `amount` decimal(13,2) NOT NULL,
+  `currency` varchar(191) NOT NULL,
+  `interval` varchar(191) NOT NULL DEFAULT 'month',
+  `interval_count` int(11) NOT NULL DEFAULT 1,
+  `product_id` int(11) NOT NULL,
+  `stripe_id` varchar(50) DEFAULT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prices_product_id_index` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prices`
+--
+
+LOCK TABLES `prices` WRITE;
+/*!40000 ALTER TABLE `prices` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `description` text DEFAULT NULL,
+  `uuid` char(36) NOT NULL,
+  `feature_list` text DEFAULT NULL,
+  `position` smallint(6) NOT NULL DEFAULT 0,
+  `recommended` tinyint(1) NOT NULL DEFAULT 0,
+  `free` tinyint(1) NOT NULL DEFAULT 0,
+  `hidden` tinyint(1) NOT NULL DEFAULT 0,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `products_position_index` (`position`),
+  KEY `products_free_index` (`free`),
+  KEY `products_hidden_index` (`hidden`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_aggregates`
+--
+
+DROP TABLE IF EXISTS `pulse_aggregates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_aggregates` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `bucket` int(10) unsigned NOT NULL,
+  `period` mediumint(8) unsigned NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `aggregate` varchar(191) NOT NULL,
+  `value` decimal(20,2) NOT NULL,
+  `count` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pulse_aggregates_bucket_period_type_aggregate_key_hash_unique` (`bucket`,`period`,`type`,`aggregate`,`key_hash`),
+  KEY `pulse_aggregates_period_bucket_index` (`period`,`bucket`),
+  KEY `pulse_aggregates_type_index` (`type`),
+  KEY `pulse_aggregates_period_type_aggregate_bucket_index` (`period`,`type`,`aggregate`,`bucket`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_aggregates`
+--
+
+LOCK TABLES `pulse_aggregates` WRITE;
+/*!40000 ALTER TABLE `pulse_aggregates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pulse_aggregates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_entries`
+--
+
+DROP TABLE IF EXISTS `pulse_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_entries` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` int(10) unsigned NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `value` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pulse_entries_timestamp_index` (`timestamp`),
+  KEY `pulse_entries_type_index` (`type`),
+  KEY `pulse_entries_key_hash_index` (`key_hash`),
+  KEY `pulse_entries_timestamp_type_key_hash_value_index` (`timestamp`,`type`,`key_hash`,`value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_entries`
+--
+
+LOCK TABLES `pulse_entries` WRITE;
+/*!40000 ALTER TABLE `pulse_entries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pulse_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_values`
+--
+
+DROP TABLE IF EXISTS `pulse_values`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_values` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` int(10) unsigned NOT NULL,
+  `type` varchar(191) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `value` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pulse_values_type_key_hash_unique` (`type`,`key_hash`),
+  KEY `pulse_values_timestamp_index` (`timestamp`),
+  KEY `pulse_values_type_index` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_values`
+--
+
+LOCK TABLES `pulse_values` WRITE;
+/*!40000 ALTER TABLE `pulse_values` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pulse_values` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `default` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `guests` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `description` varchar(191) DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'sitewide',
+  `internal` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groups_name_unique` (`name`),
+  KEY `groups_default_index` (`default`),
+  KEY `groups_guests_index` (`guests`),
+  KEY `roles_internal_index` (`internal`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'users',NULL,1,0,'2024-09-29 19:19:19','2024-09-29 19:19:19',NULL,'sitewide',1),(2,'guests',NULL,0,1,'2024-09-29 19:19:19','2024-09-29 19:19:19',NULL,'sitewide',1),(3,'Workspace Admin',NULL,0,0,'2024-09-29 19:19:19','2024-09-29 19:19:19','Manage workspace content, members, settings and invite new members.','workspace',0),(4,'Workspace Editor',NULL,0,0,'2024-09-29 19:19:19','2024-09-29 19:19:19','Add, edit, move and delete workspace files.','workspace',0),(5,'Workspace Contributor',NULL,0,0,'2024-09-29 19:19:19','2024-09-29 19:19:19','Add and edit files.','workspace',0);
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schedule_log`
+--
+
+DROP TABLE IF EXISTS `schedule_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `schedule_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `command` varchar(191) NOT NULL,
+  `output` text DEFAULT NULL,
+  `ran_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `duration` int(10) unsigned NOT NULL,
+  `count_in_last_hour` int(11) NOT NULL DEFAULT 1,
+  `exit_code` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `schedule_log_command_index` (`command`),
+  KEY `schedule_log_ran_at_index` (`ran_at`),
+  KEY `schedule_log_duration_index` (`duration`),
+  KEY `schedule_log_exit_code_index` (`exit_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedule_log`
+--
+
+LOCK TABLES `schedule_log` WRITE;
+/*!40000 ALTER TABLE `schedule_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `value` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `private` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `settings_name_unique` (`name`),
+  KEY `settings_private_index` (`private`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settings`
+--
+
+LOCK TABLES `settings` WRITE;
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES (1,'dates.format','short','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(2,'dates.locale','en_US','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(3,'dates.default_timezone','auto','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(4,'locale.default','auto','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(5,'social.google.enable','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(6,'social.twitter.enable','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(7,'social.facebook.enable','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(8,'social.compact_buttons','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(9,'realtime.enable','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(10,'registration.disable','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(11,'branding.logo_dark','images/logo-dark.svg','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(12,'branding.logo_light','images/logo-light.svg','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(13,'i18n.default_localization','en','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(14,'i18n.enable','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(15,'logging.sentry_public','','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(16,'realtime.pusher_key','','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(17,'themes.user_change','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(18,'themes.default_id','0','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(19,'billing.enable','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(20,'billing.paypal_test_mode','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(21,'billing.stripe_test_mode','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(22,'billing.stripe.enable','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(23,'billing.paypal.enable','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(24,'billing.accepted_cards','[\"visa\",\"mastercard\",\"american-express\",\"discover\"]','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(25,'uploads.chunk','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(26,'cookie_notice.enable','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(27,'cookie_notice.position','bottom','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(28,'cache.report_minutes','60','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(29,'homepage.type','landingPage','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(30,'menus','[{\"name\":\"Drive Sidebar\",\"positions\":[\"drive-sidebar\"],\"id\":\"v01akw\",\"items\":[{\"id\":\"wkd771\",\"type\":\"route\",\"order\":1,\"label\":\"Shared with me\",\"action\":\"\\/drive\\/shares\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M9 13.75c-2.34 0-7 1.17-7 3.5V19h14v-1.75c0-2.33-4.66-3.5-7-3.5zM4.34 17c.84-.58 2.87-1.25 4.66-1.25s3.82.67 4.66 1.25H4.34zM9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12zm0-5c.83 0 1.5.67 1.5 1.5S9.83 10 9 10s-1.5-.67-1.5-1.5S8.17 7 9 7zm7.04 6.81c1.16.84 1.96 1.96 1.96 3.44V19h4v-1.75c0-2.02-3.5-3.17-5.96-3.44zM15 12c1.93 0 3.5-1.57 3.5-3.5S16.93 5 15 5c-.54 0-1.04.13-1.5.35.63.89 1 1.98 1 3.15s-.37 2.26-1 3.15c.46.22.96.35 1.5.35z\"}}]},{\"id\":\"jo2m1s\",\"type\":\"route\",\"order\":2,\"label\":\"Recent\",\"action\":\"\\/drive\\/recent\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.25 2.52.77-1.28-3.52-2.09V8z\"}}]},{\"id\":\"4e6cie\",\"type\":\"route\",\"order\":3,\"label\":\"Starred\",\"action\":\"\\/drive\\/starred\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z\"}}]},{\"id\":\"h5p54n\",\"type\":\"route\",\"order\":4,\"label\":\"Trash\",\"action\":\"\\/drive\\/trash\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z\"}}]}]},{\"name\":\"footer\",\"id\":\"4tbwog\",\"positions\":[\"footer\"],\"items\":[{\"type\":\"route\",\"id\":\"c1sf2g\",\"position\":1,\"label\":\"Developers\",\"action\":\"\\/api-docs\",\"condition\":\"auth\"},{\"type\":\"route\",\"id\":\"rlz27v\",\"position\":2,\"label\":\"Privacy Policy\",\"action\":\"\\/pages\\/privacy-policy\"},{\"type\":\"route\",\"id\":\"p80pvk\",\"position\":3,\"label\":\"Terms of Service\",\"action\":\"\\/pages\\/terms-of-service\"},{\"type\":\"route\",\"id\":\"q8dtht\",\"position\":4,\"label\":\"Contact Us\",\"action\":\"\\/contact\"}]},{\"name\":\"Footer Social\",\"id\":\"odw4ah\",\"positions\":[\"footer-secondary\"],\"items\":[{\"type\":\"link\",\"id\":\"6j747e\",\"position\":1,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h7.621v-6.961h-2.343v-2.725h2.343V9.309c0-2.324 1.421-3.591 3.495-3.591.699-.002 1.397.034 2.092.105v2.43H16.78c-1.13 0-1.35.534-1.35 1.322v1.735h2.7l-.351 2.725h-2.365V21H19a2 2 0 002-2V5a2 2 0 00-2-2z\"}}],\"action\":\"https:\\/\\/facebook.com\"},{\"type\":\"link\",\"id\":\"jo96zw\",\"position\":2,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M24 4.3c-.898.4-1.8.7-2.8.802 1-.602 1.8-1.602 2.198-2.704-1 .602-2 1-3.097 1.204C19.3 2.602 18 2 16.6 2a4.907 4.907 0 00-4.9 4.898c0 .403 0 .801.102 1.102C7.7 7.8 4.102 5.898 1.7 2.898c-.5.704-.7 1.602-.7 2.5 0 1.704.898 3.204 2.2 4.102-.802-.102-1.598-.3-2.2-.602V9c0 2.398 1.7 4.398 3.898 4.8-.398.098-.796.2-1.296.2-.301 0-.602 0-.903-.102.602 2 2.403 3.403 4.602 3.403-1.7 1.3-3.801 2.097-6.102 2.097-.398 0-.8 0-1.199-.097C2.2 20.699 4.8 21.5 7.5 21.5c9.102 0 14-7.5 14-14v-.602c1-.699 1.8-1.597 2.5-2.597\"}}],\"action\":\"https:\\/\\/twitter.com\"},{\"type\":\"link\",\"id\":\"57dsea\",\"position\":3,\"action\":\"https:\\/\\/instagram.com\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913a5.885 5.885 0 001.384 2.126A5.868 5.868 0 004.14 23.37c.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558a5.898 5.898 0 002.126-1.384 5.86 5.86 0 001.384-2.126c.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913a5.89 5.89 0 00-1.384-2.126A5.847 5.847 0 0019.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227a3.81 3.81 0 01-.899 1.382 3.744 3.744 0 01-1.38.896c-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421a3.716 3.716 0 01-1.379-.899 3.644 3.644 0 01-.9-1.38c-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z\"}}]},{\"type\":\"link\",\"id\":\"lzntr2\",\"position\":4,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M5.68 2l1.478 5.344v2.562H8.44V7.344L9.937 2h-1.29l-.538 2.432a27.21 27.21 0 00-.29 1.515h-.04c-.063-.42-.159-.93-.29-1.525L6.97 2H5.68zm5.752 2.018c-.434 0-.784.084-1.051.257-.267.172-.464.448-.59.825-.125.377-.187.876-.187 1.498v.84c0 .615.054 1.107.164 1.478.11.371.295.644.556.82.261.176.62.264 1.078.264.446 0 .8-.087 1.06-.26.26-.173.45-.444.565-.818.116-.374.174-.869.174-1.485v-.84c0-.62-.059-1.118-.178-1.492-.119-.373-.308-.648-.566-.824-.258-.176-.598-.263-1.025-.263zm2.447.113v4.314c0 .534.09.927.271 1.178.182.251.465.377.848.377.552 0 .968-.267 1.244-.8h.028l.113.706H17.4V4.131h-1.298v4.588a.635.635 0 01-.23.263.569.569 0 01-.325.104c-.132 0-.226-.054-.283-.164-.057-.11-.086-.295-.086-.553V4.131h-1.3zm-2.477.781c.182 0 .311.095.383.287.072.191.108.495.108.91v1.8c0 .426-.036.735-.108.923-.072.188-.2.282-.38.283-.183 0-.309-.095-.378-.283-.07-.188-.103-.497-.103-.924V6.11c0-.414.035-.718.107-.91.072-.19.195-.287.371-.287zM5 11c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2H5zm7.049 2h1.056v2.568h.008c.095-.186.232-.335.407-.449.175-.114.364-.17.566-.17.26 0 .463.07.611.207.148.138.257.361.323.668.066.308.097.735.097 1.281v.772h.002c0 .727-.089 1.26-.264 1.602-.175.342-.447.513-.818.513-.207 0-.394-.047-.564-.142a.93.93 0 01-.383-.391h-.024l-.11.46h-.907V13zm-6.563.246h3.252v.885h-1.09v5.789H6.576v-5.79h-1.09v-.884zm11.612 1.705c.376 0 .665.07.867.207.2.138.343.354.426.645.082.292.123.695.123 1.209v.836h-1.836v.248c0 .313.008.547.027.703.02.156.057.27.115.342.058.072.148.107.27.107.164 0 .277-.064.338-.191.06-.127.094-.338.1-.635l.947.055a1.6 1.6 0 01.007.175c0 .451-.124.788-.37 1.01-.248.223-.595.334-1.046.334-.54 0-.92-.17-1.138-.51-.218-.339-.326-.863-.326-1.574v-.851c0-.732.112-1.267.337-1.604.225-.337.613-.506 1.159-.506zm-8.688.094h1.1v3.58c0 .217.024.373.072.465.048.093.126.139.238.139a.486.486 0 00.276-.088.538.538 0 00.193-.223v-3.873h1.1v4.875h-.862l-.093-.598h-.026c-.234.452-.584.678-1.05.678-.325 0-.561-.106-.715-.318-.154-.212-.233-.544-.233-.994v-3.643zm8.664.648c-.117 0-.204.036-.26.104-.056.069-.093.182-.11.338a6.504 6.504 0 00-.028.71v.35h.803v-.35c0-.312-.01-.548-.032-.71-.02-.162-.059-.276-.115-.342-.056-.066-.14-.1-.258-.1zm-3.482.036a.418.418 0 00-.293.126.699.699 0 00-.192.327v2.767a.487.487 0 00.438.256.337.337 0 00.277-.127c.07-.085.12-.228.149-.43.029-.2.043-.48.043-.835v-.627c0-.382-.011-.676-.035-.883-.024-.207-.067-.357-.127-.444a.299.299 0 00-.26-.13z\"}}],\"action\":\"https:\\/\\/youtube.com\"}]},{\"name\":\"Auth Dropdown\",\"id\":\"h8r6vg\",\"items\":[{\"label\":\"Admin Area\",\"id\":\"upm1rv\",\"action\":\"\\/admin\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9 17v2H5v-2h4M21 3h-8v6h8V3zM11 3H3v10h8V3zm10 8h-8v10h8V11zm-10 4H3v6h8v-6z\"}}],\"permissions\":[\"admin.access\"]},{\"label\":\"My Files\",\"id\":\"ehj0uk\",\"action\":\"\\/drive\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V6h5.17l1.41 1.41.59.59H20v10zm-7.84-6H8v2h4.16l-1.59 1.59L11.99 17 16 13.01 11.99 9l-1.41 1.41L12.16 12z\"}}]},{\"label\":\"Account Settings\",\"id\":\"6a89z5\",\"action\":\"\\/account-settings\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z\"}}]}],\"positions\":[\"auth-dropdown\"]},{\"name\":\"Admin Sidebar\",\"id\":\"2d43u1\",\"items\":[{\"label\":\"Analytics\",\"id\":\"886nz4\",\"action\":\"\\/admin\",\"type\":\"route\",\"condition\":\"admin\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M7 12h2v5H7zm8-5h2v10h-2zm-4 7h2v3h-2zm0-4h2v2h-2z\"}}],\"role\":1,\"permissions\":[\"admin.access\"],\"roles\":[]},{\"label\":\"Appearance\",\"id\":\"slcqm0\",\"action\":\"\\/admin\\/appearance\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"m2.53 19.65 1.34.56v-9.03l-2.43 5.86c-.41 1.02.08 2.19 1.09 2.61zm19.5-3.7L17.07 3.98c-.31-.75-1.04-1.21-1.81-1.23-.26 0-.53.04-.79.15L7.1 5.95c-.75.31-1.21 1.03-1.23 1.8-.01.27.04.54.15.8l4.96 11.97c.31.76 1.05 1.22 1.83 1.23.26 0 .52-.05.77-.15l7.36-3.05c1.02-.42 1.51-1.59 1.09-2.6zm-9.2 3.8L7.87 7.79l7.35-3.04h.01l4.95 11.95-7.35 3.05z\"}},{\"tag\":\"circle\",\"attr\":{\"cx\":\"11\",\"cy\":\"9\",\"r\":\"1\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M5.88 19.75c0 1.1.9 2 2 2h1.45l-3.45-8.34v6.34z\"}}],\"permissions\":[\"appearance.update\"]},{\"label\":\"Settings\",\"id\":\"x5k484\",\"action\":\"\\/admin\\/settings\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z\"}}],\"permissions\":[\"settings.update\"]},{\"label\":\"Plans\",\"id\":\"7o42rt\",\"action\":\"\\/admin\\/plans\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M7 15h7v2H7zm0-4h10v2H7zm0-4h10v2H7zm12-4h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-.14 0-.27.01-.4.04-.39.08-.74.28-1.01.55-.18.18-.33.4-.43.64-.1.23-.16.49-.16.77v14c0 .27.06.54.16.78s.25.45.43.64c.27.27.62.47 1.01.55.13.02.26.03.4.03h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7-.25c.41 0 .75.34.75.75s-.34.75-.75.75-.75-.34-.75-.75.34-.75.75-.75zM19 19H5V5h14v14z\"}}],\"permissions\":[\"plans.update\"]},{\"label\":\"Subscriptions\",\"action\":\"\\/admin\\/subscriptions\",\"type\":\"route\",\"id\":\"sdcb5a\",\"condition\":\"admin\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M4 6h16v2H4zm2-4h12v2H6zm14 8H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm0 10H4v-8h16v8zm-10-7.27v6.53L16 16z\"}}],\"permissions\":[\"subscriptions.update\"]},{\"label\":\"Users\",\"action\":\"\\/admin\\/users\",\"type\":\"route\",\"id\":\"fzfb45\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\"}}],\"permissions\":[\"users.update\"]},{\"label\":\"Roles\",\"action\":\"\\/admin\\/roles\",\"type\":\"route\",\"id\":\"mwdkf0\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M9 13.75c-2.34 0-7 1.17-7 3.5V19h14v-1.75c0-2.33-4.66-3.5-7-3.5zM4.34 17c.84-.58 2.87-1.25 4.66-1.25s3.82.67 4.66 1.25H4.34zM9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12zm0-5c.83 0 1.5.67 1.5 1.5S9.83 10 9 10s-1.5-.67-1.5-1.5S8.17 7 9 7zm7.04 6.81c1.16.84 1.96 1.96 1.96 3.44V19h4v-1.75c0-2.02-3.5-3.17-5.96-3.44zM15 12c1.93 0 3.5-1.57 3.5-3.5S16.93 5 15 5c-.54 0-1.04.13-1.5.35.63.89 1 1.98 1 3.15s-.37 2.26-1 3.15c.46.22.96.35 1.5.35z\"}}],\"permissions\":[\"roles.update\"]},{\"label\":\"Pages\",\"action\":\"\\/admin\\/custom-pages\",\"type\":\"route\",\"id\":\"63bwv9\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z\"}}],\"permissions\":[\"custom_pages.update\"]},{\"label\":\"Tags\",\"action\":\"\\/admin\\/tags\",\"type\":\"route\",\"id\":\"2x0pzq\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16zM16 17H5V7h11l3.55 5L16 17z\"}}],\"permissions\":[\"tags.update\"]},{\"label\":\"Files\",\"action\":\"\\/admin\\/files\",\"type\":\"route\",\"id\":\"vguvti\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4H8c-1.1 0-1.99.9-1.99 2L6 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V11l-6-6zM8 21V7h6v5h5v9H8z\"}}],\"permissions\":[\"files.update\"]},{\"label\":\"Localizations\",\"action\":\"\\/admin\\/localizations\",\"type\":\"route\",\"id\":\"w91yql\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"m12.87 15.07-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7 1.62-4.33L19.12 17h-3.24z\"}}],\"permissions\":[\"localizations.update\"]},{\"label\":\"Ads\",\"action\":\"\\/admin\\/ads\",\"type\":\"route\",\"id\":\"ohj4qk\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zM7 4V3h10v1H7zm0 14V6h10v12H7zm0 3v-1h10v1H7z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M16 7H8v2h8V7z\"}}],\"permissions\":[\"settings.update\"]},{\"label\":\"Logs\",\"action\":\"\\/admin\\/logs\",\"type\":\"route\",\"id\":\"8j435f\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm-3-4H6V7h9v2z\"}}]}],\"positions\":[\"admin-sidebar\"]}]','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(31,'uploads.max_size','52428800','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(32,'uploads.chunk_size','15728640','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(33,'uploads.available_space','104857600','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(34,'s3_direct_upload','true','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(35,'uploads.blocked_extensions','[\"exe\",\"application\\/x-msdownload\",\"x-dosexec\"]','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(36,'homepage.appearance','{\"headerTitle\":\"BeDrive. A new home for your files.\",\"headerSubtitle\":\"Register or Login now to upload, backup, manage and access your files on any device, from anywhere, free.\",\"headerImage\":\"images\\/homepage\\/homepage-header-bg.jpg\",\"headerImageOpacity\":1,\"headerOverlayColor1\":null,\"headerOverlayColor2\":null,\"footerTitle\":\"Get started with BeDrive\",\"footerSubtitle\":null,\"footerImage\":\"images\\/homepage\\/homepage-footer-bg.svg\",\"actions\":{\"cta1\":{\"label\":\"Register Now\",\"type\":\"route\",\"action\":\"\\/register\"},\"cta2\":null,\"cta3\":{\"label\":\"Sign up for free\",\"type\":\"route\",\"action\":\"\\/register\"}},\"primaryFeatures\":[{\"title\":\"Store any file\",\"subtitle\":\"Keep photos, stories, designs, drawings, recordings, videos, and more. Your first 15 GB of storage are free.\",\"image\":\"images\\/homepage\\/upload.svg\"},{\"title\":\"See your stuff anywhere\",\"subtitle\":\"Your files in BeDrive can be reached from any smartphone, tablet, or computer.\",\"image\":\"images\\/homepage\\/web-devices.svg\"},{\"title\":\"Share files and folders\",\"subtitle\":\"You can quickly invite others to view, download, and collaborate on all the files you want.\",\"image\":\"images\\/homepage\\/share.svg\"}],\"secondaryFeatures\":[{\"title\":\"Keep your files safe\",\"image\":\"images\\/homepage\\/homepage-feature-1.jpg\",\"description\":\"If something happens to your device, you don\'t have to worry about losing your files or photos \\u2013 they\'re in your BeDrive. And BeDrive is encrypted using SSL.\"},{\"title\":\"Reliable storage and fast transfers\",\"image\":\"images\\/homepage\\/homepage-feature-2.jpg\",\"description\":\"We make secure cloud storage simple and convenient. Create a free BeDrive account today!\"}]}','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(37,'drive.default_view','grid','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(38,'drive.send_share_notification','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(39,'share.suggest_emails','false','2024-09-29 19:19:19','2024-09-29 19:19:19',0),(40,'branding.favicon','favicon/icon-144x144.png?v=1727648363','2024-09-29 19:19:23','2024-09-29 19:19:23',0);
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shareable_links`
+--
+
+DROP TABLE IF EXISTS `shareable_links`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shareable_links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hash` varchar(30) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `entry_id` int(10) unsigned NOT NULL,
+  `allow_edit` tinyint(1) NOT NULL DEFAULT 0,
+  `allow_download` tinyint(1) NOT NULL DEFAULT 1,
+  `password` varchar(191) DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `shareable_links_hash_unique` (`hash`),
+  KEY `shareable_links_user_id_index` (`user_id`),
+  KEY `shareable_links_entry_id_index` (`entry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shareable_links`
+--
+
+LOCK TABLES `shareable_links` WRITE;
+/*!40000 ALTER TABLE `shareable_links` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shareable_links` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sns_logs`
+--
+
+DROP TABLE IF EXISTS `sns_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sns_logs` (
+  `id` char(36) NOT NULL,
+  `message` text NOT NULL,
+  `message_identifier` varchar(255) NOT NULL,
+  `message_type` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  UNIQUE KEY `sns_logs_message_identifier_unique` (`message_identifier`),
+  KEY `sns_logs_message_type_index` (`message_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sns_logs`
+--
+
+LOCK TABLES `sns_logs` WRITE;
+/*!40000 ALTER TABLE `sns_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sns_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_profiles`
+--
+
+DROP TABLE IF EXISTS `social_profiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `social_profiles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `service_name` varchar(20) NOT NULL,
+  `user_service_id` varchar(191) NOT NULL,
+  `username` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `access_token` text DEFAULT NULL,
+  `refresh_token` text DEFAULT NULL,
+  `access_expires_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `social_profiles_user_id_service_name_unique` (`user_id`,`service_name`),
+  UNIQUE KEY `social_profiles_service_name_user_service_id_unique` (`service_name`,`user_service_id`),
+  KEY `social_profiles_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `social_profiles`
+--
+
+LOCK TABLES `social_profiles` WRITE;
+/*!40000 ALTER TABLE `social_profiles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `subscriptions`
+--
+
+DROP TABLE IF EXISTS `subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subscriptions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `price_id` varchar(191) NOT NULL,
+  `gateway_name` varchar(191) NOT NULL DEFAULT 'none',
+  `gateway_id` varchar(191) DEFAULT NULL,
+  `gateway_status` varchar(40) NOT NULL DEFAULT 'active',
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `description` text DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  `renews_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `product_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `subscriptions_gateway_id_unique` (`gateway_id`),
+  KEY `subscriptions_user_id_index` (`user_id`),
+  KEY `subscriptions_plan_id_index` (`price_id`),
+  KEY `subscriptions_gateway_index` (`gateway_name`),
+  KEY `subscriptions_product_id_index` (`product_id`),
+  KEY `subscriptions_gateway_status_index` (`gateway_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `subscriptions`
+--
+
+LOCK TABLES `subscriptions` WRITE;
+/*!40000 ALTER TABLE `subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taggables`
+--
+
+DROP TABLE IF EXISTS `taggables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `taggables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tag_id` int(10) unsigned NOT NULL,
+  `taggable_id` int(10) unsigned NOT NULL,
+  `taggable_type` varchar(80) NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `taggable_unique` (`tag_id`,`taggable_id`,`user_id`,`taggable_type`),
+  KEY `taggables_tag_id_index` (`tag_id`),
+  KEY `taggables_taggable_id_index` (`taggable_id`),
+  KEY `taggables_taggable_type_index` (`taggable_type`),
+  KEY `taggables_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taggables`
+--
+
+LOCK TABLES `taggables` WRITE;
+/*!40000 ALTER TABLE `taggables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taggables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `display_name` varchar(191) DEFAULT NULL,
+  `type` varchar(30) NOT NULL DEFAULT 'custom',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tags_name_user_id_type_unique` (`name`,`user_id`,`type`),
+  KEY `tags_type_index` (`type`),
+  KEY `tags_created_at_index` (`created_at`),
+  KEY `tags_updated_at_index` (`updated_at`),
+  KEY `tags_user_id_index` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tags`
+--
+
+LOCK TABLES `tags` WRITE;
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES (1,'starred','Starred','label','2024-09-29 19:19:19','2024-09-29 19:19:19',NULL);
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `uploads`
+--
+
+DROP TABLE IF EXISTS `uploads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `uploads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `file_name` varchar(36) NOT NULL,
+  `file_size` varchar(191) NOT NULL,
+  `mime` varchar(191) NOT NULL,
+  `extension` varchar(191) NOT NULL,
+  `user_id` varchar(191) NOT NULL,
+  `url` varchar(191) DEFAULT NULL,
+  `thumbnail_url` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `public` tinyint(1) NOT NULL DEFAULT 0,
+  `path` varchar(191) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uploads_file_name_unique` (`file_name`),
+  KEY `uploads_name_index` (`name`),
+  KEY `uploads_user_id_index` (`user_id`),
+  KEY `uploads_public_index` (`public`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `uploads`
+--
+
+LOCK TABLES `uploads` WRITE;
+/*!40000 ALTER TABLE `uploads` DISABLE KEYS */;
+/*!40000 ALTER TABLE `uploads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_models`
+--
+
+DROP TABLE IF EXISTS `user_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_models` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `b_user_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_models_model_type_model_id_index` (`model_type`,`model_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_models`
+--
+
+LOCK TABLES `user_models` WRITE;
+/*!40000 ALTER TABLE `user_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_group_user_id_group_id_unique` (`user_id`,`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `avatar_url` varchar(191) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `email` varchar(191) NOT NULL,
+  `password` varchar(60) DEFAULT NULL,
+  `two_factor_secret` text DEFAULT NULL,
+  `two_factor_recovery_codes` text DEFAULT NULL,
+  `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
+  `card_brand` varchar(30) DEFAULT NULL,
+  `card_last_four` varchar(4) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `space_available` bigint(20) unsigned DEFAULT NULL,
+  `language` varchar(6) DEFAULT NULL,
+  `country` varchar(40) DEFAULT NULL,
+  `timezone` varchar(30) DEFAULT NULL,
+  `avatar` text DEFAULT NULL,
+  `stripe_id` varchar(191) DEFAULT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `card_expires` varchar(10) DEFAULT NULL,
+  `banned_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  UNIQUE KEY `users_paypal_id_unique` (`paypal_id`),
+  KEY `users_created_at_index` (`created_at`),
+  KEY `users_updated_at_index` (`updated_at`),
+  KEY `users_username_index` (`username`),
+  KEY `users_first_name_index` (`first_name`),
+  KEY `users_last_name_index` (`last_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_invites`
+--
+
+DROP TABLE IF EXISTS `workspace_invites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_invites` (
+  `id` char(36) NOT NULL,
+  `avatar` varchar(80) DEFAULT NULL,
+  `workspace_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `email` varchar(80) NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspace_invites_workspace_id_index` (`workspace_id`),
+  KEY `workspace_invites_user_id_index` (`user_id`),
+  KEY `workspace_invites_email_index` (`email`),
+  KEY `workspace_invites_role_id_index` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_invites`
+--
+
+LOCK TABLES `workspace_invites` WRITE;
+/*!40000 ALTER TABLE `workspace_invites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_invites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_models`
+--
+
+DROP TABLE IF EXISTS `workspace_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_models` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `workspace_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspace_models_model_type_model_id_index` (`model_type`,`model_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_models`
+--
+
+LOCK TABLES `workspace_models` WRITE;
+/*!40000 ALTER TABLE `workspace_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_user`
+--
+
+DROP TABLE IF EXISTS `workspace_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `workspace_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned DEFAULT NULL,
+  `is_owner` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `workspace_user_workspace_id_user_id_unique` (`workspace_id`,`user_id`),
+  KEY `workspace_user_user_id_index` (`user_id`),
+  KEY `workspace_user_workspace_id_index` (`workspace_id`),
+  KEY `workspace_user_role_id_index` (`role_id`),
+  KEY `workspace_user_is_owner_index` (`is_owner`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_user`
+--
+
+LOCK TABLES `workspace_user` WRITE;
+/*!40000 ALTER TABLE `workspace_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_users`
+--
+
+DROP TABLE IF EXISTS `workspace_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_users` (
+  `workspace_id` bigint(20) unsigned NOT NULL,
+  `b_user_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  KEY `workspace_users_workspace_id_b_user_id_index` (`workspace_id`,`b_user_id`),
+  KEY `workspace_users_workspace_id_index` (`workspace_id`),
+  KEY `workspace_users_b_user_id_index` (`b_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_users`
+--
+
+LOCK TABLES `workspace_users` WRITE;
+/*!40000 ALTER TABLE `workspace_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspaces`
+--
+
+DROP TABLE IF EXISTS `workspaces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspaces` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `owner_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspaces_owner_id_index` (`owner_id`),
+  KEY `workspaces_created_at_index` (`created_at`),
+  KEY `workspaces_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspaces`
+--
+
+LOCK TABLES `workspaces` WRITE;
+/*!40000 ALTER TABLE `workspaces` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspaces` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-03-07  3:35:32

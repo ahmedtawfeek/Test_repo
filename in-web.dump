@@ -1,0 +1,1697 @@
+-- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: in-web
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.28-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `active_sessions`
+--
+
+DROP TABLE IF EXISTS `active_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `active_sessions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `active_sessions_session_id_index` (`session_id`),
+  KEY `active_sessions_token_index` (`token`),
+  KEY `active_sessions_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `active_sessions`
+--
+
+LOCK TABLES `active_sessions` WRITE;
+/*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ai_history`
+--
+
+DROP TABLE IF EXISTS `ai_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ai_history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `prompt` longtext NOT NULL,
+  `response` longtext NOT NULL,
+  `tokens_used` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ai_history_user_id_index` (`user_id`),
+  KEY `ai_history_type_index` (`type`),
+  KEY `ai_history_tokens_used_index` (`tokens_used`),
+  KEY `ai_history_created_at_index` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ai_history`
+--
+
+LOCK TABLES `ai_history` WRITE;
+/*!40000 ALTER TABLE `ai_history` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ai_history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bans`
+--
+
+DROP TABLE IF EXISTS `bans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bannable_type` varchar(255) NOT NULL,
+  `bannable_id` bigint(20) unsigned NOT NULL,
+  `created_by_type` varchar(255) DEFAULT NULL,
+  `created_by_id` bigint(20) unsigned DEFAULT NULL,
+  `comment` text DEFAULT NULL,
+  `expired_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bans_bannable_type_bannable_id_index` (`bannable_type`,`bannable_id`),
+  KEY `bans_created_by_type_created_by_id_index` (`created_by_type`,`created_by_id`),
+  KEY `bans_expired_at_index` (`expired_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bans`
+--
+
+LOCK TABLES `bans` WRITE;
+/*!40000 ALTER TABLE `bans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `billing_plans`
+--
+
+DROP TABLE IF EXISTS `billing_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `billing_plans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `amount` decimal(13,2) DEFAULT NULL,
+  `currency` varchar(255) NOT NULL,
+  `currency_symbol` varchar(255) NOT NULL DEFAULT '$',
+  `interval` varchar(255) NOT NULL DEFAULT 'month',
+  `interval_count` int(11) NOT NULL DEFAULT 1,
+  `parent_id` int(11) DEFAULT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `uuid` char(36) NOT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `recommended` tinyint(1) NOT NULL DEFAULT 0,
+  `free` tinyint(1) NOT NULL DEFAULT 0,
+  `show_permissions` tinyint(1) NOT NULL DEFAULT 0,
+  `features` text DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `hidden` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `billing_plans_hidden_index` (`hidden`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `billing_plans`
+--
+
+LOCK TABLES `billing_plans` WRITE;
+/*!40000 ALTER TABLE `billing_plans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `billing_plans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `builder_pages`
+--
+
+DROP TABLE IF EXISTS `builder_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `builder_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  `pageable_id` int(11) NOT NULL,
+  `pageable_type` varchar(50) NOT NULL DEFAULT 'AppModelsProject',
+  `description` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `builder_pages_name_pageable_type_pageable_id_unique` (`name`,`pageable_type`,`pageable_id`),
+  KEY `builder_pages_pageable_id_index` (`pageable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `builder_pages`
+--
+
+LOCK TABLES `builder_pages` WRITE;
+/*!40000 ALTER TABLE `builder_pages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `builder_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comment_reports`
+--
+
+DROP TABLE IF EXISTS `comment_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comment_reports` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `reason` varchar(255) DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `comment_id` bigint(20) unsigned DEFAULT NULL,
+  `user_ip` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `comment_reports_user_id_index` (`user_id`),
+  KEY `comment_reports_comment_id_index` (`comment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comment_reports`
+--
+
+LOCK TABLES `comment_reports` WRITE;
+/*!40000 ALTER TABLE `comment_reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comment_reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comment_votes`
+--
+
+DROP TABLE IF EXISTS `comment_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comment_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vote_type` varchar(10) NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `comment_id` int(10) unsigned NOT NULL,
+  `user_ip` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `comment_votes_user_ip_comment_id_unique` (`user_ip`,`comment_id`),
+  UNIQUE KEY `comment_votes_user_id_comment_id_unique` (`user_id`,`comment_id`),
+  KEY `comment_votes_user_id_index` (`user_id`),
+  KEY `comment_votes_comment_id_index` (`comment_id`),
+  KEY `comment_votes_user_ip_index` (`user_ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comment_votes`
+--
+
+LOCK TABLES `comment_votes` WRITE;
+/*!40000 ALTER TABLE `comment_votes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comment_votes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `path` varchar(255) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `commentable_id` int(10) unsigned NOT NULL,
+  `commentable_type` varchar(30) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `upvotes` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `downvotes` bigint(20) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `comments_parent_id_index` (`parent_id`),
+  KEY `comments_path_index` (`path`),
+  KEY `comments_user_id_index` (`user_id`),
+  KEY `comments_commentable_id_index` (`commentable_id`),
+  KEY `comments_commentable_type_index` (`commentable_type`),
+  KEY `comments_deleted_index` (`deleted`),
+  KEY `comments_upvotes_index` (`upvotes`),
+  KEY `comments_downvotes_index` (`downvotes`),
+  KEY `comments_created_at_index` (`created_at`),
+  KEY `comments_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comments`
+--
+
+LOCK TABLES `comments` WRITE;
+/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `css_themes`
+--
+
+DROP TABLE IF EXISTS `css_themes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `css_themes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `is_dark` tinyint(1) NOT NULL DEFAULT 0,
+  `default_light` tinyint(1) NOT NULL DEFAULT 0,
+  `default_dark` tinyint(1) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL,
+  `values` text NOT NULL,
+  `font` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `css_themes_name_unique` (`name`),
+  KEY `css_themes_default_light_index` (`default_light`),
+  KEY `css_themes_default_dark_index` (`default_dark`),
+  KEY `css_themes_user_id_index` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `css_themes`
+--
+
+LOCK TABLES `css_themes` WRITE;
+/*!40000 ALTER TABLE `css_themes` DISABLE KEYS */;
+INSERT INTO `css_themes` VALUES (1,'Dark',1,0,1,1,'{\"--be-foreground-base\":\"255 255 255\",\"--be-primary-light\":\"239 246 255\",\"--be-primary\":\"191 219 254\",\"--be-primary-dark\":\"147 197 253\",\"--be-on-primary\":\"255 255 255\",\"--be-background\":\"28 28 32\",\"--be-background-alt\":\"41 41 46\",\"--be-background-chip\":\"66 68 74\",\"--be-paper\":\"36 36 41\",\"--be-navbar-color\":\"bg\",\"--be-disabled-bg-opacity\":\"12%\",\"--be-disabled-fg-opacity\":\"30%\",\"--be-hover-opacity\":\"8%\",\"--be-focus-opacity\":\"12%\",\"--be-selected-opacity\":\"16%\",\"--be-text-main-opacity\":\"100%\",\"--be-text-muted-opacity\":\"70%\",\"--be-divider-opacity\":\"12%\",\"--be-button-radius\":\"0.25rem\",\"--be-input-radius\":\"0.25rem\",\"--be-panel-radius\":\"0.25rem\"}',NULL,'2025-02-12 20:35:52','2025-02-12 20:35:52'),(2,'Light',0,1,0,1,'{\"--be-foreground-base\":\"0 0 0\",\"--be-primary-light\":\"191 219 254\",\"--be-primary\":\"59 130 246\",\"--be-primary-dark\":\"37 99 235\",\"--be-on-primary\":\"255 255 255\",\"--be-background\":\"255 255 255\",\"--be-background-alt\":\"246 248 250\",\"--be-background-chip\":\"233 236 239\",\"--be-paper\":\"255 255 255\",\"--be-navbar-color\":\"bg\",\"--be-disabled-bg-opacity\":\"12%\",\"--be-disabled-fg-opacity\":\"26%\",\"--be-hover-opacity\":\"4%\",\"--be-focus-opacity\":\"12%\",\"--be-selected-opacity\":\"8%\",\"--be-text-main-opacity\":\"87%\",\"--be-text-muted-opacity\":\"60%\",\"--be-divider-opacity\":\"12%\",\"--be-button-radius\":\"0.25rem\",\"--be-input-radius\":\"0.25rem\",\"--be-panel-radius\":\"0.25rem\"}',NULL,'2025-02-12 20:35:52','2025-02-12 20:35:52');
+/*!40000 ALTER TABLE `css_themes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `csv_exports`
+--
+
+DROP TABLE IF EXISTS `csv_exports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `csv_exports` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `cache_name` varchar(50) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `download_name` varchar(50) NOT NULL,
+  `uuid` char(36) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `csv_exports_cache_name_unique` (`cache_name`),
+  KEY `csv_exports_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `csv_exports`
+--
+
+LOCK TABLES `csv_exports` WRITE;
+/*!40000 ALTER TABLE `csv_exports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `csv_exports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `custom_domains`
+--
+
+DROP TABLE IF EXISTS `custom_domains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `custom_domains` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `host` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `global` tinyint(1) NOT NULL DEFAULT 0,
+  `resource_id` int(10) unsigned DEFAULT NULL,
+  `resource_type` varchar(20) DEFAULT NULL,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `custom_domains_host_unique` (`host`),
+  KEY `custom_domains_user_id_index` (`user_id`),
+  KEY `custom_domains_created_at_index` (`created_at`),
+  KEY `custom_domains_updated_at_index` (`updated_at`),
+  KEY `custom_domains_global_index` (`global`),
+  KEY `custom_domains_resource_id_index` (`resource_id`),
+  KEY `custom_domains_resource_type_index` (`resource_type`),
+  KEY `custom_domains_workspace_id_index` (`workspace_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `custom_domains`
+--
+
+LOCK TABLES `custom_domains` WRITE;
+/*!40000 ALTER TABLE `custom_domains` DISABLE KEYS */;
+/*!40000 ALTER TABLE `custom_domains` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `custom_pages`
+--
+
+DROP TABLE IF EXISTS `custom_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `custom_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `body` longtext NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `meta` text DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'default',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `hide_nav` tinyint(1) NOT NULL DEFAULT 0,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pages_slug_unique` (`slug`),
+  KEY `pages_type_index` (`type`),
+  KEY `pages_user_id_index` (`user_id`),
+  KEY `custom_pages_workspace_id_index` (`workspace_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `custom_pages`
+--
+
+LOCK TABLES `custom_pages` WRITE;
+/*!40000 ALTER TABLE `custom_pages` DISABLE KEYS */;
+INSERT INTO `custom_pages` VALUES (1,'Example Privacy Policy','<p>Welcome to Architect (\"us\", \"we\", or \"our\"). At http://127.0.0.1:8000, we value your privacy and strive to protect your personal information. This Privacy Policy outlines the types of data we collect, how we use and protect it, and your rights regarding your personal information.</p>\n<h2>Information We Collect</h2>\n<p>We may collect various types of information from you, including:</p>\n<ol>\n  <li><strong>Personal Information:</strong> When you register for an account, place an order, subscribe to our newsletter, or interact with our website, we may collect personal information such as your name, email address, postal address, phone number, and payment information.</li>\n  <li><strong>Usage Data:</strong> We may automatically collect information about how you use our website, including your IP address, browser type, operating system, referring URLs, access times, and pages viewed.</li>\n  <li><strong>Cookies and Tracking Technologies:</strong> We use cookies and similar tracking technologies to enhance your browsing experience and collect data about your interactions with our website.</li>\n</ol>\n<h2>How We Use Your Information</h2>\n<p>We use the collected information for various purposes, including:</p>\n<ol>\n  <li>Providing and improving our services to you.</li>\n  <li>Processing your orders and payments.</li>\n  <li>Sending you newsletters and promotional materials.</li>\n  <li>Analyzing website usage and trends to enhance user experience.</li>\n  <li>Responding to your inquiries and providing customer support.</li>\n  <li>Protecting our legal rights and preventing fraud.</li>\n</ol>\n<h2>Data Sharing and Disclosure</h2>\n<p>We may share your personal information with:</p>\n<ol>\n  <li>Third-party service providers who assist us in operating our website and delivering services to you.</li>\n  <li>Legal authorities when required by law or to protect our rights and safety.</li>\n</ol>\n<p>We do not sell, rent, or trade your personal information to third parties for marketing purposes.</p>\n<h2>Your Rights</h2>\n<p>You have the right to:</p>\n<ol>\n  <li>Access, correct, or delete your personal information.</li>\n  <li>Withdraw your consent for processing your data.</li>\n  <li>Object to processing of your personal data.</li>\n  <li>Lodge a complaint with a supervisory authority.</li>\n</ol>\n<h2>Security</h2>\n<p>We take reasonable measures to protect your personal information from unauthorized access, alteration, or disclosure. However, no data transmission over the internet or storage system can be guaranteed to be 100% secure.</p>\n<h2>Children\'s Privacy</h2>\n<p>Our services are not intended for children under the age of 13. We do not knowingly collect or maintain personal information from children.</p>\n<h2>Changes to This Privacy Policy</h2>\n<p>We may update our Privacy Policy from time to time. Any changes will be posted on this page, and the \"Last updated\" date will be revised accordingly.</p>\n<h2>Contact Us</h2>\n<p>If you have any questions, concerns, or requests regarding your personal information or our Privacy Policy, please contact us at <a href=\"mailto:\"></a>.</p>\n','privacy-policy',NULL,'default','2025-02-12 20:36:12','2025-02-12 20:36:12',NULL,0,NULL),(2,'Example Terms of Service','<p>\n  Welcome to Architect (\"us\", \"we\", or \"our\"). By accessing and using our website, you agree to\n  comply with and be bound by the following Terms of Service. Please read these terms carefully\n  before using our services.\n</p>\n<h2>1. Acceptance of Terms</h2>\n<p>\n  By using our website, you acknowledge that you have read, understood, and agree to abide by these\n  Terms of Service. If you do not agree with these terms, please do not use our services.\n</p>\n<h2>2. Use of Our Services</h2>\n<p>\n  You may use our website and services only for lawful purposes and in compliance with all\n  applicable laws and regulations. You agree not to engage in any activity that may disrupt or\n  interfere with the functioning of our website.\n</p>\n<h2>3. User Accounts</h2>\n<p>\n  If you create an account on our website, you are responsible for maintaining the confidentiality\n  of your account information and password. You agree to notify us immediately of any unauthorized\n  use of your account.\n</p>\n<h2>4. Content</h2>\n<p>\n  Any content you submit to our website, including text, images, and other materials, must comply\n  with our content guidelines. You retain ownership of your content, but you grant us a\n  non-exclusive, royalty-free license to use, reproduce, and distribute your content on our\n  platform.\n</p>\n<h2>5. Intellectual Property</h2>\n<p>\n  Unless otherwise stated, all content and materials on our website are the property of [Website\n  Name] and are protected by copyright, trademark, and other intellectual property laws.\n</p>\n<h2>6. Disclaimer of Warranties</h2>\n<p>\n  Our website is provided \"as is\" and \"as available\" without any warranties of any kind, whether\n  express or implied. We do not guarantee the accuracy, completeness, or reliability of any content\n  or materials on our website.\n</p>\n<h2>7. Limitation of Liability</h2>\n<p>\n  We shall not be liable for any indirect, incidental, special, consequential, or punitive damages\n  arising out of or relating to your use of our website.\n</p>\n<h2>8. Governing Law</h2>\n<p>\n  These Terms of Service shall be governed by and construed in accordance with the laws of [Your\n  Country/State], without regard to its conflict of law principles.\n</p>\n<h2>9. Changes to Terms</h2>\n<p>\n  We reserve the right to modify or update these Terms of Service at any time. It is your\n  responsibility to review these terms periodically. Your continued use of our website after any\n  changes signifies your acceptance of the modified terms.\n</p>\n<h2>10. Contact Us</h2>\n<p>\n  If you have any questions or concerns regarding these Terms of Service, please contact us at\n  <a href=\"mailto:\"></a>.\n</p>\n','terms-of-service',NULL,'default','2025-02-12 20:36:12','2025-02-12 20:36:12',NULL,0,NULL),(3,'Example About Us','<p>The standard Lorem Ipsum passage, used since the 1500s\n    \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"</p>\n\n<p>Section 1.10.32 of \"de Finibus Bonorum et Malorum\", written by Cicero in 45 BC\n    \"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\"</p>\n\n<p>1914 translation by H. Rackham\n    \"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?\"</p>\n\n<p>Section 1.10.33 of \"de Finibus Bonorum et Malorum\", written by Cicero in 45 BC\n    \"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.\"</p>\n\n<p>1914 translation by H. Rackham\n    \"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.\"</p>','about-us',NULL,'default','2025-02-12 20:36:12','2025-02-12 20:36:12',NULL,0,NULL);
+/*!40000 ALTER TABLE `custom_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_jobs`
+--
+
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_entries`
+--
+
+DROP TABLE IF EXISTS `file_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file_entries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `file_name` varchar(50) NOT NULL,
+  `file_size` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `mime` varchar(100) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `public` tinyint(1) NOT NULL DEFAULT 0,
+  `disk_prefix` varchar(191) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` varchar(150) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `preview_token` varchar(15) DEFAULT NULL,
+  `thumbnail` tinyint(1) NOT NULL DEFAULT 0,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  `owner_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uploads_file_name_unique` (`file_name`),
+  KEY `uploads_name_index` (`name`),
+  KEY `uploads_user_id_index` (`user_id`),
+  KEY `uploads_public_index` (`public`),
+  KEY `file_entries_updated_at_index` (`updated_at`),
+  KEY `file_entries_parent_id_index` (`parent_id`),
+  KEY `file_entries_type_index` (`type`),
+  KEY `file_entries_deleted_at_index` (`deleted_at`),
+  KEY `file_entries_user_id_index` (`user_id`),
+  KEY `file_entries_path_index` (`path`),
+  KEY `file_entries_description_index` (`description`),
+  KEY `file_entries_workspace_id_index` (`workspace_id`),
+  KEY `file_entries_owner_id_index` (`owner_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_entries`
+--
+
+LOCK TABLES `file_entries` WRITE;
+/*!40000 ALTER TABLE `file_entries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_entry_models`
+--
+
+DROP TABLE IF EXISTS `file_entry_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file_entry_models` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `file_entry_id` int(10) unsigned NOT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `model_type` varchar(60) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `owner` tinyint(1) NOT NULL DEFAULT 0,
+  `permissions` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uploadable_unique` (`file_entry_id`,`model_id`,`model_type`),
+  KEY `file_entry_models_owner_index` (`owner`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_entry_models`
+--
+
+LOCK TABLES `file_entry_models` WRITE;
+/*!40000 ALTER TABLE `file_entry_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_entry_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `follows`
+--
+
+DROP TABLE IF EXISTS `follows`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `follows` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `follower_id` int(11) NOT NULL,
+  `followed_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `follows_follower_id_followed_id_unique` (`follower_id`,`followed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `follows`
+--
+
+LOCK TABLES `follows` WRITE;
+/*!40000 ALTER TABLE `follows` DISABLE KEYS */;
+/*!40000 ALTER TABLE `follows` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoices`
+--
+
+DROP TABLE IF EXISTS `invoices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subscription_id` int(11) NOT NULL,
+  `paid` tinyint(1) NOT NULL,
+  `uuid` varchar(36) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `notified` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invoices_subscription_id_index` (`subscription_id`),
+  KEY `invoices_uuid_index` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoices`
+--
+
+LOCK TABLES `invoices` WRITE;
+/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_reserved_at_index` (`queue`,`reserved_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs`
+--
+
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `localizations`
+--
+
+DROP TABLE IF EXISTS `localizations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `localizations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `language` varchar(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `localizations_name_index` (`name`),
+  KEY `localizations_language_index` (`language`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `localizations`
+--
+
+LOCK TABLES `localizations` WRITE;
+/*!40000 ALTER TABLE `localizations` DISABLE KEYS */;
+INSERT INTO `localizations` VALUES (1,'English','2025-02-12 20:36:26','2025-02-12 20:36:26','en');
+/*!40000 ALTER TABLE `localizations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2015_04_127_156842_create_social_profiles_table',1),(4,'2015_05_29_131549_create_settings_table',1),(5,'2015_10_23_164355_create_follows_table',1),(6,'2016_05_12_190852_create_tags_table',1),(7,'2016_05_12_190958_create_taggables_table',1),(8,'2016_05_26_170044_create_uploads_table',1),(9,'2016_05_27_143158_create_uploadables_table',1),(10,'2016_07_14_153703_create_groups_table',1),(11,'2016_07_14_153921_create_user_group_table',1),(12,'2017_06_04_122515_create_failed_jobs_table',1),(13,'2017_07_01_150551_rename_pages_table_to_builder_pages',1),(14,'2017_07_02_120142_create_pages_table',1),(15,'2017_07_02_151788_create_builder_pages_table',1),(16,'2017_07_11_122825_create_localizations_table',1),(17,'2017_08_26_131330_add_private_field_to_settings_table',1),(18,'2017_09_17_144728_add_columns_to_users_table',1),(19,'2017_09_17_152854_make_password_column_nullable',1),(20,'2017_09_30_152855_make_settings_value_column_nullable',1),(21,'2017_10_01_152897_add_public_column_to_uploads_table',1),(22,'2017_12_01_134322_upgrade_users_table_to_laravel',1),(23,'2017_12_04_132911_add_avatar_column_to_users_table',1),(24,'2017_12_05_145410_create_projects_table',1),(25,'2017_12_06_151747_add_columns_to_projects_table',1),(26,'2017_12_07_151787_create_users_projects_table',1),(27,'2018_01_10_140732_create_subscriptions_table',1),(28,'2018_01_10_140746_add_billing_to_users_table',1),(29,'2018_01_10_161706_create_billing_plans_table',1),(30,'2018_02_12_151757_add_default_and_guests_columns_to_groups_table',1),(31,'2018_07_24_113757_add_available_space_to_billing_plans_table',1),(32,'2018_07_24_124254_add_available_space_to_users_table',1),(33,'2018_07_26_142339_rename_groups_to_roles',1),(34,'2018_07_26_142842_rename_user_role_table_columns_to_roles',1),(35,'2018_08_07_124200_rename_uploads_to_file_entries',1),(36,'2018_08_07_124327_refactor_file_entries_columns',1),(37,'2018_08_07_130653_add_folder_path_column_to_file_entries_table',1),(38,'2018_08_07_140440_migrate_file_entry_users_to_many_to_many',1),(39,'2018_08_15_132225_move_uploads_into_subfolders',1),(40,'2018_08_31_104145_rename_uploadables_table',1),(41,'2018_08_31_104325_rename_file_entry_models_table_columns',1),(42,'2018_11_26_171703_add_type_and_title_columns_to_pages_table',1),(43,'2018_12_01_144233_change_unique_index_on_tags_table',1),(44,'2019_02_16_150049_delete_old_seo_settings',1),(45,'2019_02_24_141457_create_jobs_table',1),(46,'2019_03_11_162627_add_preview_token_to_file_entries_table',1),(47,'2019_03_12_160803_add_thumbnail_column_to_file_entries_table',1),(48,'2019_03_16_161836_add_paypal_id_column_to_billing_plans_table',1),(49,'2019_05_14_120930_index_description_column_in_file_entries_table',1),(50,'2019_06_08_120504_create_custom_domains_table',1),(51,'2019_06_13_140318_add_user_id_column_to_pages_table',1),(52,'2019_06_15_114320_rename_pages_table_to_custom_pages',1),(53,'2019_06_18_133933_create_permissions_table',1),(54,'2019_06_18_134203_create_permissionables_table',1),(55,'2019_06_18_135822_rename_permissions_columns',1),(56,'2019_07_08_122001_create_css_themes_table',1),(57,'2019_07_20_141752_create_invoices_table',1),(58,'2019_08_19_121112_add_global_column_to_custom_domains_table',1),(59,'2019_09_13_141123_change_plan_amount_to_float',1),(60,'2019_10_14_171943_add_index_to_username_column',1),(61,'2019_10_20_143522_create_comments_table',1),(62,'2019_10_23_134520_create_notifications_table',1),(63,'2019_11_21_144956_add_resource_id_and_type_to_custom_domains_table',1),(64,'2019_11_23_153905_add_slug_column_to_projects_table',1),(65,'2019_11_23_154003_add_slugs_to_legacy_projects',1),(66,'2019_12_14_000001_create_personal_access_tokens_table',1),(67,'2019_12_14_194512_rename_public_path_column_to_disk_prefix',1),(68,'2019_12_24_165237_change_file_size_column_default_value_to_0',1),(69,'2019_12_28_190836_update_file_entry_models_table_to_v2',1),(70,'2019_12_28_191105_move_user_file_entry_table_records_to_file_entry_models',1),(71,'2020_01_26_143733_create_notification_subscriptions_table',1),(72,'2020_03_03_140720_add_language_col_to_localizations_table',1),(73,'2020_03_03_143142_add_lang_code_to_existing_localizations',1),(74,'2020_04_14_163347_add_hidden_column_to_plans_table',1),(75,'2020_06_27_180040_add_verified_at_column_to_users_table',1),(76,'2020_06_27_180253_move_confirmed_column_to_email_verified_at',1),(77,'2020_07_15_144024_fix_issues_with_migration_to_laravel_7',1),(78,'2020_07_22_165126_create_workspaces_table',1),(79,'2020_07_23_145652_create_workspace_invites_table',1),(80,'2020_07_23_164502_create_workspace_user_table',1),(81,'2020_07_26_165349_add_columns_to_roles_table',1),(82,'2020_07_29_141418_add_workspace_id_column_to_workspaceable_models',1),(83,'2020_07_30_152330_add_type_column_to_permissions_table',1),(84,'2020_08_29_165057_add_hide_nav_column_to_custom_pages_table',1),(85,'2021_04_22_172459_add_internal_columm_to_roles_table',1),(86,'2021_05_03_173446_add_deleted_column_to_comments_table',1),(87,'2021_05_12_164940_add_advanced_column_to_permissions_table',1),(88,'2021_06_04_143405_add_workspace_id_col_to_custom_domains_table',1),(89,'2021_06_04_143406_add_workspace_id_col_to_custom_pages_table',1),(90,'2021_06_04_143406_add_workspace_id_col_to_file_entries_table',1),(91,'2021_06_05_182202_create_csv_exports_table',1),(92,'2021_06_18_161030_rename_gateway_col_in_subscriptions_table',1),(93,'2021_06_19_111939_add_owner_id_column_to_file_entries_table',1),(94,'2021_06_19_112035_materialize_owner_id_in_file_entries_table',1),(95,'2021_07_06_144837_migrate_landing_page_config_to_20',1),(96,'2021_07_17_093454_add_created_at_col_to_user_role_table',1),(97,'2021_08_12_160336_add_settings_column_to_projects_table',1),(98,'2021_09_30_123758_slugify_tag_name_column',1),(99,'2021_10_13_132915_add_token_cols_to_social_profiles_table',1),(100,'2022_04_08_122553_change_default_workspace_id_from_null_to_zero',1),(101,'2022_04_23_115027_add_id_to_all_menus',1),(102,'2022_08_10_200344_add_produce_id_column_to_subscriptions_table',1),(103,'2022_08_11_160401_create_prices_table',1),(104,'2022_08_11_170041_create_products_table',1),(105,'2022_08_11_170117_move_billing_plans_to_products_and_prices_tables',1),(106,'2022_08_17_184337_add_card_expires_column_to_users_table',1),(107,'2022_08_24_192127_migrate_common_settings_to_v3',1),(108,'2022_09_03_164633_add_expires_at_column_to_personal_access_tokens_table',1),(109,'2022_09_27_124344_change_available_space_column_to_big_int',1),(110,'2022_09_28_121423_migrate_notif_settings_from_array_to_obj',1),(111,'2022_11_06_115107_increase_file_name_column_length',1),(112,'2023_03_17_175502_add_user_id_to_tags_table',1),(113,'2023_03_17_180355_change_name_index_to_name_user_id_in_tags_table',1),(114,'2023_05_09_124348_create_bans_table',1),(115,'2023_05_09_133514_add_banned_at_column_to_users_table',1),(116,'2023_05_11_200001_add_two_factor_columns_to_users_table',1),(117,'2023_05_13_132948_active_sessions_table',1),(118,'2023_05_16_150805_change_social_profiles_token_length',1),(119,'2023_06_07_000001_create_pulse_tables',1),(120,'2023_06_10_131615_add_pos_and_neg_votes_to_comments_table',1),(121,'2023_06_10_132135_add_comment_ratings_table',1),(122,'2023_06_11_124655_create_comment_reports_table',1),(123,'2023_08_08_103123_add_timestamp_indexes_to_comments_table',1),(124,'2023_08_31_124910_update_model_types_from_namespace_to_string',1),(125,'2023_12_10_124446_upgrade_css_themes_table_to_v3',1),(126,'2023_12_18_141540_add_search_indices_to_users_table',1),(127,'2023_12_19_122804_add_uuid_column_to_failed_jobs_table',1),(128,'2023_12_23_121618_encrypt_secret_settings',1),(129,'2024_02_05_103042_change_avatar_column_to_text',1),(130,'2024_02_27_151830_add_workspace_columns',1),(131,'2024_02_27_152728_move_user_id_to_main_projects_table',1),(132,'2024_03_08_135031_create_ai_history_table',1),(133,'2024_03_23_140827_set_dynamic_app_url_to_true',1),(134,'2024_05_08_131134_add_gateway_status_column_to_subscriptions_table',1),(135,'2024_05_08_151815_increase_uuid_column_length_in_invoices_table',1),(136,'2024_05_10_151600_add_paypal_id_to_users_table',1),(137,'2024_05_12_133925_create_schedule_log_table',1),(138,'2024_05_15_123455_create_outgoing_email_log_table',1),(139,'2024_05_16_142030_create_otp_codes_table',1),(140,'2024_05_23_134009_add_logs_menu_item_to_admin_menu',1),(141,'2024_06_05_122254_add_notified_column_to_invoices_table',1),(142,'2024_06_15_123230_create_jobs_table',1),(143,'2025_01_06_150818_create_sns_logs_table',2),(144,'create_user_models_same_db_table',2),(145,'create_user_models_table',2),(146,'create_workspace_models_same_db_table',2),(147,'create_workspace_models_table',2),(148,'create_workspace_users_main_db_table',2),(149,'create_workspace_users_same_dbtable',2),(150,'create_workspaces_main_db_table',2),(151,'create_workspaces_table',2),(152,'update_user_models_table',2),(153,'update_workspace_users_main_db_table',2),(154,'update_workspaces_main_db_table',2),(155,'update_workspaces_table',2);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_subscriptions`
+--
+
+DROP TABLE IF EXISTS `notification_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notification_subscriptions` (
+  `id` char(36) NOT NULL,
+  `notif_id` varchar(5) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `channels` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notification_subscriptions_notif_id_index` (`notif_id`),
+  KEY `notification_subscriptions_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_subscriptions`
+--
+
+LOCK TABLES `notification_subscriptions` WRITE;
+/*!40000 ALTER TABLE `notification_subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notifications` (
+  `id` char(36) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notifiable_type` varchar(255) NOT NULL,
+  `notifiable_id` bigint(20) unsigned NOT NULL,
+  `data` text NOT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `otp_codes`
+--
+
+DROP TABLE IF EXISTS `otp_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `otp_codes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `expires_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `otp_codes_user_id_index` (`user_id`),
+  KEY `otp_codes_expires_at_index` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `otp_codes`
+--
+
+LOCK TABLES `otp_codes` WRITE;
+/*!40000 ALTER TABLE `otp_codes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `otp_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `outgoing_email_log`
+--
+
+DROP TABLE IF EXISTS `outgoing_email_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `outgoing_email_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `message_id` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'not-sent',
+  `from` varchar(255) NOT NULL,
+  `to` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `mime` mediumblob DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `outgoing_email_log_message_id_unique` (`message_id`),
+  KEY `outgoing_email_log_status_index` (`status`),
+  KEY `outgoing_email_log_from_index` (`from`),
+  KEY `outgoing_email_log_to_index` (`to`),
+  KEY `outgoing_email_log_created_at_index` (`created_at`),
+  KEY `outgoing_email_log_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `outgoing_email_log`
+--
+
+LOCK TABLES `outgoing_email_log` WRITE;
+/*!40000 ALTER TABLE `outgoing_email_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `outgoing_email_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password_resets`
+--
+
+DROP TABLE IF EXISTS `password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_resets` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+LOCK TABLES `password_resets` WRITE;
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissionables`
+--
+
+DROP TABLE IF EXISTS `permissionables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permissionables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` int(11) NOT NULL,
+  `permissionable_id` int(11) NOT NULL,
+  `permissionable_type` varchar(40) NOT NULL,
+  `restrictions` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissionable_unique` (`permission_id`,`permissionable_id`,`permissionable_type`),
+  KEY `permissionables_permission_id_index` (`permission_id`),
+  KEY `permissionables_permissionable_id_index` (`permissionable_id`),
+  KEY `permissionables_permissionable_type_index` (`permissionable_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissionables`
+--
+
+LOCK TABLES `permissionables` WRITE;
+/*!40000 ALTER TABLE `permissionables` DISABLE KEYS */;
+INSERT INTO `permissionables` VALUES (1,9,4,'role','[]'),(2,14,4,'role','[]'),(3,18,4,'role','[]'),(4,22,4,'role','[]'),(5,26,4,'role','[]'),(6,32,4,'role','[]'),(7,37,4,'role','[]'),(8,42,4,'role','[{\"name\":\"count\",\"value\":3},{\"name\":\"member_count\",\"value\":5}]'),(9,49,4,'role','[]'),(10,53,4,'role','[{\"name\":\"count\",\"value\":8}]'),(11,56,4,'role','[]'),(12,60,4,'role','[{\"name\":\"tokens\",\"value\":100}]'),(13,61,4,'role','[{\"name\":\"tokens\",\"value\":10000}]'),(14,9,5,'role','[]'),(15,26,5,'role','[]'),(16,32,5,'role','[]'),(17,37,5,'role','[]'),(18,22,5,'role','[]'),(19,42,1,'product','[]'),(20,49,1,'product','[]'),(21,53,1,'product','[{\"name\":\"count\",\"value\":3}]'),(22,60,1,'product','[{\"name\":\"tokens\",\"value\":1000}]'),(23,61,1,'product','[{\"name\":\"tokens\",\"value\":1000}]'),(24,42,2,'product','[]'),(25,49,2,'product','[]'),(26,51,2,'product','[]'),(27,53,2,'product','[{\"name\":\"count\",\"value\":5}]'),(28,60,2,'product','[{\"name\":\"tokens\",\"value\":10000}]'),(29,61,2,'product','[{\"name\":\"tokens\",\"value\":10000}]'),(30,42,3,'product','[]'),(31,49,3,'product','[]'),(32,51,3,'product','[]'),(33,50,3,'product','[]'),(34,53,3,'product','[{\"name\":\"count\",\"value\":10}]'),(35,60,3,'product','[]'),(36,61,3,'product','[]');
+/*!40000 ALTER TABLE `permissionables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `group` varchar(30) NOT NULL,
+  `restrictions` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'sitewide',
+  `advanced` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_name_unique` (`name`),
+  KEY `permissions_advanced_index` (`advanced`)
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+INSERT INTO `permissions` VALUES (1,'admin.access','Access Admin','Required in order to access any admin area page.','admin',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(2,'appearance.update','Update Appearance','Allows access to appearance editor.','admin',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(3,'admin','Super Admin','Give all permissions to user.','admin',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(4,'api.access','Access Api','Allow users to use the API and access API section in their account settings page.','api',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(5,'roles.view','View Roles','Allow viewing ALL roles, regardless of who is the owner.','roles',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(6,'roles.create','Create Roles','Allow creating new roles, regardless of who is the owner.','roles',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(7,'roles.update','Update Roles','Allow updating ALL roles, regardless of who is the owner.','roles',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(8,'roles.delete','Delete Roles','Allow deleting ALL roles, regardless of who is the owner.','roles',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(9,'custom_pages.view','View Custom Pages','Allow viewing of all pages on the site, regardless of who created them. User can view their own pages without this permission.','custom_pages',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(10,'custom_pages.create','Create Custom Pages','Allow creating new custom pages, regardless of who is the owner.','custom_pages','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of pages user will be able to create. Leave empty for unlimited.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(11,'custom_pages.update','Update Custom Pages','Allow editing of all pages on the site, regardless of who created them. User can edit their own pages without this permission.','custom_pages',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(12,'custom_pages.delete','Delete Custom Pages','Allow deleting of all pages on the site, regardless of who created them. User can delete their own pages without this permission.','custom_pages',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(13,'custom_domains.view','View Custom Domains','Allow viewing all domains on the site, regardless of who created them. User can view their own domains without this permission.','custom_domains',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(14,'custom_domains.create','Create Custom Domains','Allow user to connect their own custom domains.','custom_domains','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of domains user will be able to create. Leave empty for unlimited.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(15,'custom_domains.update','Update Custom Domains','Allow editing all domains on the site, regardless of who created them. User can edit their own domains without this permission.','custom_domains',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(16,'custom_domains.delete','Delete Custom Domains','Allow deleting all domains on the site, regardless of who created them. User can delete their own domains without this permission.','custom_domains',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(17,'files.view','View Files','Allow viewing all uploaded files on the site. Users can view their own uploads without this permission.','files',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(18,'files.create','Create Files','Allow uploading files on the site. This permission is used by any page where it is possible for user to upload files.','files',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(19,'files.update','Update Files','Allow editing all uploaded files on the site. Users can edit their own uploads without this permission.','files',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(20,'files.delete','Delete Files','Allow deleting all uploaded files on the site. Users can delete their own uploads (where applicable) without this permission.','files',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(21,'files.download','Download Files','Allow downloading all uploaded files on the site. Users can download their own uploads (where applicable) without this permission.','files',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(22,'users.view','View Users','Allow viewing user profile pages on the site. User can view their own profile without this permission.','users',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(23,'users.create','Create Users','Allow creating users from admin area. Users can register for new accounts without this permission. Registration can be disabled from settings page.','users',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(24,'users.update','Update Users','Allow editing details of any user on the site. User can edit their own details without this permission.','users',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(25,'users.delete','Delete Users','Allow deleting any user on the site. User can request deletion of their own account without this permission.','users',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(26,'localizations.view','View Localizations','Allow viewing ALL localizations, regardless of who is the owner.','localizations',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(27,'localizations.create','Create Localizations','Allow creating new localizations, regardless of who is the owner.','localizations',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(28,'localizations.update','Update Localizations','Allow updating ALL localizations, regardless of who is the owner.','localizations',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(29,'localizations.delete','Delete Localizations','Allow deleting ALL localizations, regardless of who is the owner.','localizations',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(30,'settings.view','View Settings','Allow viewing ALL settings, regardless of who is the owner.','settings',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(31,'settings.update','Update Settings','Allow updating ALL settings, regardless of who is the owner.','settings',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(32,'plans.view','View Plans','Allow viewing ALL plans, regardless of who is the owner.','plans',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(33,'plans.create','Create Plans','Allow creating new plans, regardless of who is the owner.','plans',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(34,'plans.update','Update Plans','Allow updating ALL plans, regardless of who is the owner.','plans',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(35,'plans.delete','Delete Plans','Allow deleting ALL plans, regardless of who is the owner.','plans',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(36,'invoices.view','View Invoices','Allow viewing ALL invoices, regardless of who is the owner.','invoices',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(37,'tags.view','View Tags','Allow viewing ALL tags, regardless of who is the owner.','tags',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(38,'tags.create','Create Tags','Allow creating new tags, regardless of who is the owner.','tags',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(39,'tags.update','Update Tags','Allow updating ALL tags, regardless of who is the owner.','tags',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(40,'tags.delete','Delete Tags','Allow deleting ALL tags, regardless of who is the owner.','tags',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(41,'workspaces.view','View Workspaces','Allow viewing of all workspaces on the site, regardless of who created them. User can view their own workspaces without this permission.','workspaces',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(42,'workspaces.create','Create Workspaces','Allow creating new workspaces, regardless of who is the owner.','workspaces','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of workspaces user will be able to create. Leave empty for unlimited.\"},{\"name\":\"member_count\",\"type\":\"number\",\"description\":\"Maximum number of members workspace is allowed to have.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(43,'workspaces.update','Update Workspaces','Allow editing of all workspaces on the site, regardless of who created them. User can edit their own workspaces without this permission.','workspaces',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(44,'workspaces.delete','Delete Workspaces','Allow deleting of all workspaces on the site, regardless of who created them. User can delete their own workspaces without this permission.','workspaces',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(45,'workspace_members.invite','Invite Members','Allow user to invite new members into a workspace.','workspace_members',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','workspace',0),(46,'workspace_members.update','Update Members','Allow user to change role of other members.','workspace_members',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','workspace',0),(47,'workspace_members.delete','Delete Members','Allow user to remove members from workspace.','workspace_members',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','workspace',0),(48,'projects.publish','Publish Projects','Allow user to publish their projects and make them public.','builder',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(49,'editors.enable','Enable Editors','Allow user to enter custom css and js in site editor.','builder',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(50,'projects.export','Export Projects','Allow user to export their site to their own FTP server.','builder',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(51,'projects.download','Download Projects','Allow user to download their sites as a .zip file.','builder',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(52,'projects.view','View Projects','Allow viewing ALL projects, regardless of who is the owner.','projects',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(53,'projects.create','Create Projects','Allow creating new projects, regardless of who is the owner.','projects','[{\"name\":\"count\",\"type\":\"number\",\"description\":\"Maximum number of projects user will be able to create. Leave empty for unlimited.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(54,'projects.update','Update Projects','Allow updating ALL projects, regardless of who is the owner.','projects',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(55,'projects.delete','Delete Projects','Allow deleting ALL projects, regardless of who is the owner.','projects',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(56,'templates.view','View Templates','Allow viewing ALL templates, regardless of who is the owner.','templates',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(57,'templates.create','Create Templates','Allow creating new templates, regardless of who is the owner.','templates',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(58,'templates.update','Update Templates','Allow updating ALL templates, regardless of who is the owner.','templates',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(59,'templates.delete','Delete Templates','Allow deleting ALL templates, regardless of who is the owner.','templates',NULL,'2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',1),(60,'ai.images','Images Ai','Allow user to generate images using AI.','ai','[{\"name\":\"tokens\",\"type\":\"number\",\"description\":\"Maximum number of tokens allowed per month for AI image generation. One token equals one generated image.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0),(61,'ai.text','Text Ai','Allow user to generate and modify text using AI.','ai','[{\"name\":\"tokens\",\"type\":\"number\",\"description\":\"Maximum number of tokens allowed per month for AI text generation.\"}]','2025-02-12 20:36:54','2025-02-12 20:36:54','sitewide',0);
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+DROP TABLE IF EXISTS `personal_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `personal_access_tokens`
+--
+
+LOCK TABLES `personal_access_tokens` WRITE;
+/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prices`
+--
+
+DROP TABLE IF EXISTS `prices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `prices` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `amount` decimal(13,2) NOT NULL,
+  `currency` varchar(255) NOT NULL,
+  `interval` varchar(255) NOT NULL DEFAULT 'month',
+  `interval_count` int(11) NOT NULL DEFAULT 1,
+  `product_id` int(11) NOT NULL,
+  `stripe_id` varchar(50) DEFAULT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prices_product_id_index` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prices`
+--
+
+LOCK TABLES `prices` WRITE;
+/*!40000 ALTER TABLE `prices` DISABLE KEYS */;
+INSERT INTO `prices` VALUES (1,10.00,'USD','month',1,1,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(2,54.00,'USD','month',6,1,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(3,96.00,'USD','month',12,1,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(4,15.00,'USD','month',1,2,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(5,81.00,'USD','month',6,2,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(6,144.00,'USD','month',12,2,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(7,20.00,'USD','month',1,3,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(8,135.00,'USD','month',6,3,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(9,240.00,'USD','month',12,3,NULL,NULL,0,'2025-03-06 22:45:55','2025-03-06 22:45:55');
+/*!40000 ALTER TABLE `prices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `uuid` char(36) NOT NULL,
+  `feature_list` text DEFAULT NULL,
+  `position` smallint(6) NOT NULL DEFAULT 0,
+  `recommended` tinyint(1) NOT NULL DEFAULT 0,
+  `free` tinyint(1) NOT NULL DEFAULT 0,
+  `hidden` tinyint(1) NOT NULL DEFAULT 0,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `products_position_index` (`position`),
+  KEY `products_free_index` (`free`),
+  KEY `products_hidden_index` (`hidden`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (1,'Basic',NULL,'b8176a2d-026a-4234-b126-68bb09ff99c9','[\"2 Sites\",\"Drag & Drop Builder\",\"1000 AI image & text tokens\",\"500MB Storage\",\"Workspaces\",\"Custom code\",\"No Ads\",\"Free Subdomain\"]',1,0,0,0,NULL,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(2,'Standard',NULL,'f174ea4c-1bb9-4505-be51-043ebdf5a08c','[\"5 Sites\",\"Drag & Drop Builder\",\"10,000 AI image & text tokens\",\"2GB Storage\",\"Custom code\",\"Workspaces\",\"No Ads\",\"Custom Domains\",\"Download Projects\"]',2,1,0,0,NULL,'2025-03-06 22:45:55','2025-03-06 22:45:55'),(3,'Pro',NULL,'04f0134a-de07-4ae1-b530-2cb7d0d4c4a4','[\"10 Sites\",\"Drag & Drop Builder\",\"Unlimited AI image & text tokens\",\"10GB Storage\",\"Custom code\",\"Workspaces\",\"No Ads\",\"Custom Domains\",\"Download Projects\",\"Export Projects to FTP\",\"Priority Support\"]',3,0,0,0,NULL,'2025-03-06 22:45:55','2025-03-06 22:45:55');
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `projects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `uuid` char(36) DEFAULT NULL,
+  `template` varchar(255) DEFAULT NULL,
+  `slug` varchar(30) NOT NULL,
+  `workspace_id` int(10) unsigned DEFAULT NULL,
+  `settings` longtext DEFAULT NULL,
+  `user_id` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `projects_name_index` (`name`),
+  KEY `projects_slug_index` (`slug`),
+  KEY `projects_workspace_id_index` (`workspace_id`),
+  KEY `projects_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `projects`
+--
+
+LOCK TABLES `projects` WRITE;
+/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_aggregates`
+--
+
+DROP TABLE IF EXISTS `pulse_aggregates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_aggregates` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `bucket` int(10) unsigned NOT NULL,
+  `period` mediumint(8) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `aggregate` varchar(255) NOT NULL,
+  `value` decimal(20,2) NOT NULL,
+  `count` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pulse_aggregates_bucket_period_type_aggregate_key_hash_unique` (`bucket`,`period`,`type`,`aggregate`,`key_hash`),
+  KEY `pulse_aggregates_period_bucket_index` (`period`,`bucket`),
+  KEY `pulse_aggregates_type_index` (`type`),
+  KEY `pulse_aggregates_period_type_aggregate_bucket_index` (`period`,`type`,`aggregate`,`bucket`)
+) ENGINE=InnoDB AUTO_INCREMENT=17527 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_aggregates`
+--
+
+LOCK TABLES `pulse_aggregates` WRITE;
+/*!40000 ALTER TABLE `pulse_aggregates` DISABLE KEYS */;
+INSERT INTO `pulse_aggregates` (`id`, `bucket`, `period`, `type`, `key`, `aggregate`, `value`, `count`) VALUES (15682,1740271680,10080,'cache_hit','settings.public','count',14.00,NULL),(15722,1740271680,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(15730,1740271680,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740272657.00,NULL),(15741,1740862800,360,'cache_miss','settings.public','count',9.00,NULL),(15742,1740862080,1440,'cache_miss','settings.public','count',9.00,NULL),(15743,1740856320,10080,'cache_miss','settings.public','count',9.00,NULL),(15769,1740862800,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(15770,1740862080,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(15771,1740856320,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(15777,1740862800,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740863013.00,NULL),(15778,1740862080,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740863013.00,NULL),(15779,1740856320,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740863013.00,NULL),(15785,1740862800,360,'cache_hit','settings.public','count',7.00,NULL),(15786,1740862080,1440,'cache_hit','settings.public','count',13.00,NULL),(15787,1740856320,10080,'cache_hit','settings.public','count',102.00,NULL),(15813,1740863160,360,'cache_hit','settings.public','count',6.00,NULL),(15837,1740863520,360,'cache_hit','settings.public','count',7.00,NULL),(15838,1740863520,1440,'cache_hit','settings.public','count',43.00,NULL),(15865,1740863880,360,'cache_hit','settings.public','count',7.00,NULL),(15893,1740864240,360,'cache_hit','settings.public','count',6.00,NULL),(15917,1740864600,360,'cache_hit','settings.public','count',23.00,NULL),(15933,1740864600,360,'user_request','1','count',15.00,NULL),(15934,1740863520,1440,'user_request','1','count',15.00,NULL),(15935,1740856320,10080,'user_request','1','count',25.00,NULL),(15938,1740864600,360,'cache_miss','127.0.0.1','count',12.00,NULL),(15939,1740863520,1440,'cache_miss','127.0.0.1','count',12.00,NULL),(15940,1740856320,10080,'cache_miss','127.0.0.1','count',13.00,NULL),(16097,1740864600,360,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(16098,1740863520,1440,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(16099,1740856320,10080,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(16101,1740864600,360,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(16102,1740863520,1440,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(16103,1740856320,10080,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',21.00,NULL),(16125,1740864960,360,'cache_hit','settings.public','count',17.00,NULL),(16126,1740864960,1440,'cache_hit','settings.public','count',46.00,NULL),(16128,1740864960,360,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',7.00,NULL),(16129,1740864960,1440,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',18.00,NULL),(16137,1740864960,360,'user_request','1','count',4.00,NULL),(16138,1740864960,1440,'user_request','1','count',10.00,NULL),(16161,1740864960,360,'cache_miss','127.0.0.1','count',1.00,NULL),(16162,1740864960,1440,'cache_miss','127.0.0.1','count',1.00,NULL),(16173,1740864960,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',3.00,NULL),(16174,1740864960,1440,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',4.00,NULL),(16175,1740856320,10080,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',4.00,NULL),(16177,1740864960,360,'slow_user_request','27','count',3.00,NULL),(16178,1740864960,1440,'slow_user_request','27','count',4.00,NULL),(16179,1740856320,10080,'slow_user_request','27','count',4.00,NULL),(16181,1740864960,360,'user_request','27','count',3.00,NULL),(16182,1740864960,1440,'user_request','27','count',4.00,NULL),(16183,1740856320,10080,'user_request','27','count',4.00,NULL),(16185,1740864960,360,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','count',1.00,NULL),(16186,1740864960,1440,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','count',1.00,NULL),(16187,1740856320,10080,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','count',1.00,NULL),(16189,1740864960,360,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb','count',2.00,NULL),(16190,1740864960,1440,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb','count',3.00,NULL),(16191,1740856320,10080,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb','count',3.00,NULL),(16193,1740864960,360,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','count',1.00,NULL),(16194,1740864960,1440,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','count',1.00,NULL),(16195,1740856320,10080,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','count',1.00,NULL),(16197,1740864960,360,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb','count',4.00,NULL),(16198,1740864960,1440,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb','count',5.00,NULL),(16199,1740856320,10080,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb','count',5.00,NULL),(16205,1740864960,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',14431.00,NULL),(16206,1740864960,1440,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',14431.00,NULL),(16207,1740856320,10080,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',14431.00,NULL),(16209,1740864960,360,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','max',1087.00,NULL),(16210,1740864960,1440,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','max',1087.00,NULL),(16211,1740856320,10080,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]','max',1087.00,NULL),(16213,1740864960,360,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','max',1740864965.00,NULL),(16214,1740864960,1440,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','max',1740864965.00,NULL),(16215,1740856320,10080,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]','max',1740864965.00,NULL),(16307,1740864960,360,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(16308,1740864960,1440,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',2.00,NULL),(16322,1740865320,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',2.00,NULL),(16323,1740864960,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',2.00,NULL),(16324,1740856320,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',2.00,NULL),(16326,1740865320,360,'slow_user_request','1','count',2.00,NULL),(16327,1740864960,1440,'slow_user_request','1','count',2.00,NULL),(16328,1740856320,10080,'slow_user_request','1','count',2.00,NULL),(16330,1740865320,360,'user_request','1','count',2.00,NULL),(16332,1740865320,360,'cache_hit','settings.public','count',11.00,NULL),(16334,1740865320,360,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',4.00,NULL),(16342,1740865320,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1648.00,NULL),(16343,1740864960,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1648.00,NULL),(16344,1740856320,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1648.00,NULL),(16346,1740865320,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',1.00,NULL),(16348,1740865320,360,'slow_user_request','27','count',1.00,NULL),(16350,1740865320,360,'user_request','27','count',1.00,NULL),(16352,1740865320,360,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb','count',1.00,NULL),(16354,1740865320,360,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb','count',1.00,NULL),(16370,1740865320,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',8415.00,NULL),(16430,1740865680,360,'cache_hit','settings.public','count',12.00,NULL),(16442,1740865680,360,'user_request','1','count',4.00,NULL),(16444,1740865680,360,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(16446,1740865680,360,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',7.00,NULL),(16514,1740866040,360,'cache_hit','settings.public','count',6.00,NULL),(16538,1740866400,360,'cache_hit','settings.public','count',7.00,NULL),(16539,1740866400,1440,'cache_hit','settings.public','count',27.00,NULL),(16540,1740866400,10080,'cache_hit','settings.public','count',94.00,NULL),(16561,1740866700,60,'cache_hit','settings.public','count',1.00,NULL),(16565,1740866760,60,'cache_hit','settings.public','count',1.00,NULL),(16566,1740866760,360,'cache_hit','settings.public','count',6.00,NULL),(16569,1740866820,60,'cache_hit','settings.public','count',1.00,NULL),(16573,1740866880,60,'cache_hit','settings.public','count',1.00,NULL),(16577,1740866940,60,'cache_hit','settings.public','count',1.00,NULL),(16581,1740867000,60,'cache_hit','settings.public','count',1.00,NULL),(16585,1740867060,60,'cache_hit','settings.public','count',1.00,NULL),(16589,1740867120,60,'cache_hit','settings.public','count',2.00,NULL),(16590,1740867120,360,'cache_hit','settings.public','count',7.00,NULL),(16597,1740867180,60,'cache_hit','settings.public','count',1.00,NULL),(16601,1740867240,60,'cache_hit','settings.public','count',1.00,NULL),(16605,1740867300,60,'cache_hit','settings.public','count',1.00,NULL),(16609,1740867360,60,'cache_hit','settings.public','count',1.00,NULL),(16613,1740867420,60,'cache_hit','settings.public','count',1.00,NULL),(16617,1740867480,60,'cache_hit','settings.public','count',1.00,NULL),(16618,1740867480,360,'cache_hit','settings.public','count',7.00,NULL),(16621,1740867540,60,'cache_hit','settings.public','count',1.00,NULL),(16625,1740867600,60,'cache_hit','settings.public','count',1.00,NULL),(16629,1740867660,60,'cache_hit','settings.public','count',1.00,NULL),(16633,1740867720,60,'cache_hit','settings.public','count',2.00,NULL),(16641,1740867780,60,'cache_hit','settings.public','count',1.00,NULL),(16645,1740867840,60,'cache_hit','settings.public','count',1.00,NULL),(16646,1740867840,360,'cache_hit','settings.public','count',6.00,NULL),(16647,1740867840,1440,'cache_hit','settings.public','count',26.00,NULL),(16649,1740867900,60,'cache_hit','settings.public','count',1.00,NULL),(16653,1740867960,60,'cache_hit','settings.public','count',1.00,NULL),(16657,1740868020,60,'cache_hit','settings.public','count',1.00,NULL),(16661,1740868080,60,'cache_hit','settings.public','count',1.00,NULL),(16665,1740868140,60,'cache_hit','settings.public','count',1.00,NULL),(16669,1740868200,60,'cache_hit','settings.public','count',1.00,NULL),(16670,1740868200,360,'cache_hit','settings.public','count',7.00,NULL),(16673,1740868260,60,'cache_hit','settings.public','count',1.00,NULL),(16677,1740868320,60,'cache_hit','settings.public','count',2.00,NULL),(16685,1740868380,60,'cache_hit','settings.public','count',1.00,NULL),(16689,1740868440,60,'cache_hit','settings.public','count',1.00,NULL),(16693,1740868500,60,'cache_hit','settings.public','count',1.00,NULL),(16697,1740868560,60,'cache_hit','settings.public','count',1.00,NULL),(16698,1740868560,360,'cache_hit','settings.public','count',6.00,NULL),(16701,1740868620,60,'cache_hit','settings.public','count',1.00,NULL),(16705,1740868680,60,'cache_hit','settings.public','count',1.00,NULL),(16709,1740868740,60,'cache_hit','settings.public','count',1.00,NULL),(16713,1740868800,60,'cache_hit','settings.public','count',1.00,NULL),(16717,1740868860,60,'cache_hit','settings.public','count',1.00,NULL),(16721,1740868920,60,'cache_hit','settings.public','count',2.00,NULL),(16722,1740868920,360,'cache_hit','settings.public','count',7.00,NULL),(16729,1740868980,60,'cache_hit','settings.public','count',1.00,NULL),(16733,1740869040,60,'cache_hit','settings.public','count',1.00,NULL),(16737,1740869100,60,'cache_hit','settings.public','count',1.00,NULL),(16741,1740869160,60,'cache_hit','settings.public','count',1.00,NULL),(16745,1740869220,60,'cache_hit','settings.public','count',1.00,NULL),(16749,1740869280,60,'cache_hit','settings.public','count',1.00,NULL),(16750,1740869280,360,'cache_hit','settings.public','count',7.00,NULL),(16751,1740869280,1440,'cache_hit','settings.public','count',26.00,NULL),(16753,1740869340,60,'cache_hit','settings.public','count',1.00,NULL),(16757,1740869400,60,'cache_hit','settings.public','count',1.00,NULL),(16761,1740869460,60,'cache_hit','settings.public','count',1.00,NULL),(16765,1740869520,60,'cache_hit','settings.public','count',2.00,NULL),(16773,1740869580,60,'cache_hit','settings.public','count',1.00,NULL),(16777,1740869640,60,'cache_hit','settings.public','count',1.00,NULL),(16778,1740869640,360,'cache_hit','settings.public','count',6.00,NULL),(16781,1740869700,60,'cache_hit','settings.public','count',1.00,NULL),(16785,1740869760,60,'cache_hit','settings.public','count',1.00,NULL),(16789,1740869820,60,'cache_hit','settings.public','count',1.00,NULL),(16793,1740869880,60,'cache_hit','settings.public','count',1.00,NULL),(16797,1740869940,60,'cache_hit','settings.public','count',1.00,NULL),(16801,1740870000,60,'cache_hit','settings.public','count',1.00,NULL),(16802,1740870000,360,'cache_hit','settings.public','count',7.00,NULL),(16805,1740870060,60,'cache_hit','settings.public','count',1.00,NULL),(16809,1740870120,60,'cache_hit','settings.public','count',2.00,NULL),(16817,1740870180,60,'cache_hit','settings.public','count',1.00,NULL),(16821,1740870240,60,'cache_hit','settings.public','count',1.00,NULL),(16825,1740870300,60,'cache_hit','settings.public','count',1.00,NULL),(16829,1740870360,60,'cache_hit','settings.public','count',1.00,NULL),(16830,1740870360,360,'cache_hit','settings.public','count',6.00,NULL),(16833,1740870420,60,'cache_hit','settings.public','count',1.00,NULL),(16837,1740870480,60,'cache_hit','settings.public','count',1.00,NULL),(16841,1740870540,60,'cache_hit','settings.public','count',1.00,NULL),(16845,1740870600,60,'cache_hit','settings.public','count',1.00,NULL),(16849,1740870660,60,'cache_hit','settings.public','count',1.00,NULL),(16853,1740870720,60,'cache_hit','settings.public','count',2.00,NULL),(16854,1740870720,360,'cache_hit','settings.public','count',2.00,NULL),(16855,1740870720,1440,'cache_hit','settings.public','count',2.00,NULL),(16861,1740876420,60,'cache_hit','settings.public','count',13.00,NULL),(16862,1740876120,360,'cache_hit','settings.public','count',13.00,NULL),(16863,1740875040,1440,'cache_hit','settings.public','count',13.00,NULL),(16901,1740876420,60,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(16902,1740876120,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(16903,1740875040,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(16904,1740866400,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(16909,1740876420,60,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740876456.00,NULL),(16910,1740876120,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740876456.00,NULL),(16911,1740875040,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740876456.00,NULL),(16912,1740866400,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1740876456.00,NULL),(16921,1740876480,60,'cache_hit','settings.public','count',1.00,NULL),(16922,1740876480,360,'cache_hit','settings.public','count',6.00,NULL),(16923,1740876480,1440,'cache_hit','settings.public','count',26.00,NULL),(16924,1740876480,10080,'cache_hit','settings.public','count',76.00,NULL),(16925,1740876540,60,'cache_hit','settings.public','count',1.00,NULL),(16929,1740876600,60,'cache_hit','settings.public','count',1.00,NULL),(16933,1740876660,60,'cache_hit','settings.public','count',1.00,NULL),(16937,1740876720,60,'cache_hit','settings.public','count',1.00,NULL),(16941,1740876780,60,'cache_hit','settings.public','count',1.00,NULL),(16945,1740876840,60,'cache_hit','settings.public','count',1.00,NULL),(16946,1740876840,360,'cache_hit','settings.public','count',7.00,NULL),(16949,1740876900,60,'cache_hit','settings.public','count',1.00,NULL),(16953,1740876960,60,'cache_hit','settings.public','count',1.00,NULL),(16957,1740877020,60,'cache_hit','settings.public','count',2.00,NULL),(16965,1740877080,60,'cache_hit','settings.public','count',1.00,NULL),(16969,1740877140,60,'cache_hit','settings.public','count',1.00,NULL),(16973,1740877200,60,'cache_hit','settings.public','count',1.00,NULL),(16974,1740877200,360,'cache_hit','settings.public','count',6.00,NULL),(16977,1740877260,60,'cache_hit','settings.public','count',1.00,NULL),(16981,1740877320,60,'cache_hit','settings.public','count',1.00,NULL),(16985,1740877380,60,'cache_hit','settings.public','count',1.00,NULL),(16989,1740877440,60,'cache_hit','settings.public','count',1.00,NULL),(16993,1740877500,60,'cache_hit','settings.public','count',1.00,NULL),(16997,1740877560,60,'cache_hit','settings.public','count',1.00,NULL),(16998,1740877560,360,'cache_hit','settings.public','count',7.00,NULL),(17001,1740877620,60,'cache_hit','settings.public','count',2.00,NULL),(17009,1740877680,60,'cache_hit','settings.public','count',1.00,NULL),(17013,1740877740,60,'cache_hit','settings.public','count',1.00,NULL),(17017,1740877800,60,'cache_hit','settings.public','count',1.00,NULL),(17021,1740877860,60,'cache_hit','settings.public','count',1.00,NULL),(17025,1740877920,60,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','count',2.00,NULL),(17026,1740877920,360,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','count',2.00,NULL),(17027,1740877920,1440,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','count',2.00,NULL),(17028,1740876480,10080,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','count',2.00,NULL),(17029,1740877920,60,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','max',1740877960.00,NULL),(17030,1740877920,360,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','max',1740877960.00,NULL),(17031,1740877920,1440,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','max',1740877960.00,NULL),(17032,1740876480,10080,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]','max',1740877960.00,NULL),(17033,1740877920,60,'cache_hit','settings.public','count',2.00,NULL),(17034,1740877920,360,'cache_hit','settings.public','count',14.00,NULL),(17035,1740877920,1440,'cache_hit','settings.public','count',33.00,NULL),(17045,1740877920,60,'user_request','1','count',1.00,NULL),(17046,1740877920,360,'user_request','1','count',7.00,NULL),(17047,1740877920,1440,'user_request','1','count',7.00,NULL),(17048,1740876480,10080,'user_request','1','count',7.00,NULL),(17049,1740877920,60,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(17050,1740877920,360,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(17051,1740877920,1440,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(17052,1740876480,10080,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(17053,1740877920,60,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(17054,1740877920,360,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',11.00,NULL),(17055,1740877920,1440,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',11.00,NULL),(17056,1740876480,10080,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',11.00,NULL),(17061,1740877980,60,'cache_hit','settings.public','count',2.00,NULL),(17065,1740877980,60,'user_request','1','count',1.00,NULL),(17066,1740877980,60,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',2.00,NULL),(17077,1740878040,60,'cache_hit','settings.public','count',3.00,NULL),(17081,1740878040,60,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',1.00,NULL),(17082,1740877920,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',1.00,NULL),(17083,1740877920,1440,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',1.00,NULL),(17084,1740876480,10080,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','count',1.00,NULL),(17085,1740878040,60,'slow_user_request','1','count',1.00,NULL),(17086,1740877920,360,'slow_user_request','1','count',2.00,NULL),(17087,1740877920,1440,'slow_user_request','1','count',2.00,NULL),(17088,1740876480,10080,'slow_user_request','1','count',2.00,NULL),(17089,1740878040,60,'user_request','1','count',2.00,NULL),(17090,1740878040,60,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(17091,1740878040,60,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',3.00,NULL),(17105,1740878040,60,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',15256.00,NULL),(17106,1740877920,360,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',15256.00,NULL),(17107,1740877920,1440,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',15256.00,NULL),(17108,1740876480,10080,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]','max',15256.00,NULL),(17121,1740878100,60,'cache_hit','settings.public','count',1.00,NULL),(17125,1740878160,60,'cache_hit','settings.public','count',1.00,NULL),(17129,1740878160,60,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','count',1.00,NULL),(17130,1740877920,360,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','count',1.00,NULL),(17131,1740877920,1440,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','count',1.00,NULL),(17132,1740876480,10080,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','count',1.00,NULL),(17133,1740878160,60,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','max',1740878197.00,NULL),(17134,1740877920,360,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','max',1740878197.00,NULL),(17135,1740877920,1440,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','max',1740878197.00,NULL),(17136,1740876480,10080,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]','max',1740878197.00,NULL),(17137,1740878220,60,'user_request','1','count',3.00,NULL),(17138,1740878220,60,'cache_hit','settings.public','count',5.00,NULL),(17139,1740878220,60,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4','count',1.00,NULL),(17140,1740878220,60,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4','count',5.00,NULL),(17153,1740878220,60,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',1.00,NULL),(17154,1740877920,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',1.00,NULL),(17155,1740877920,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',1.00,NULL),(17156,1740876480,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','count',1.00,NULL),(17157,1740878220,60,'slow_user_request','1','count',1.00,NULL),(17173,1740878220,60,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1086.00,NULL),(17174,1740877920,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1086.00,NULL),(17175,1740877920,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1086.00,NULL),(17176,1740876480,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]','max',1086.00,NULL),(17197,1740878280,60,'cache_hit','settings.public','count',1.00,NULL),(17198,1740878280,360,'cache_hit','settings.public','count',6.00,NULL),(17201,1740878340,60,'cache_hit','settings.public','count',1.00,NULL),(17205,1740878400,60,'cache_hit','settings.public','count',1.00,NULL),(17209,1740878460,60,'cache_hit','settings.public','count',1.00,NULL),(17213,1740878520,60,'cache_hit','settings.public','count',1.00,NULL),(17217,1740878580,60,'cache_hit','settings.public','count',1.00,NULL),(17221,1740878640,60,'cache_hit','settings.public','count',1.00,NULL),(17222,1740878640,360,'cache_hit','settings.public','count',7.00,NULL),(17225,1740878700,60,'cache_hit','settings.public','count',1.00,NULL),(17229,1740878760,60,'cache_hit','settings.public','count',1.00,NULL),(17233,1740878820,60,'cache_hit','settings.public','count',2.00,NULL),(17241,1740878880,60,'cache_hit','settings.public','count',1.00,NULL),(17245,1740878940,60,'cache_hit','settings.public','count',1.00,NULL),(17249,1740879000,60,'cache_hit','settings.public','count',1.00,NULL),(17250,1740879000,360,'cache_hit','settings.public','count',6.00,NULL),(17253,1740879060,60,'cache_hit','settings.public','count',1.00,NULL),(17257,1740879120,60,'cache_hit','settings.public','count',1.00,NULL),(17261,1740879180,60,'cache_hit','settings.public','count',1.00,NULL),(17265,1740879240,60,'cache_hit','settings.public','count',1.00,NULL),(17269,1740879300,60,'cache_hit','settings.public','count',1.00,NULL),(17273,1740879360,60,'cache_hit','settings.public','count',1.00,NULL),(17274,1740879360,360,'cache_hit','settings.public','count',7.00,NULL),(17275,1740879360,1440,'cache_hit','settings.public','count',17.00,NULL),(17277,1740879420,60,'cache_hit','settings.public','count',2.00,NULL),(17285,1740879480,60,'cache_hit','settings.public','count',1.00,NULL),(17289,1740879540,60,'cache_hit','settings.public','count',1.00,NULL),(17293,1740879600,60,'cache_hit','settings.public','count',1.00,NULL),(17297,1740879660,60,'cache_hit','settings.public','count',1.00,NULL),(17301,1740879720,60,'cache_hit','settings.public','count',1.00,NULL),(17302,1740879720,360,'cache_hit','settings.public','count',7.00,NULL),(17305,1740879780,60,'cache_hit','settings.public','count',1.00,NULL),(17309,1740879840,60,'cache_hit','settings.public','count',1.00,NULL),(17313,1740879900,60,'cache_hit','settings.public','count',1.00,NULL),(17317,1740879960,60,'cache_hit','settings.public','count',1.00,NULL),(17321,1740880020,60,'cache_hit','settings.public','count',2.00,NULL),(17329,1740880080,60,'cache_hit','settings.public','count',1.00,NULL),(17330,1740880080,360,'cache_hit','settings.public','count',3.00,NULL),(17333,1740880140,60,'cache_hit','settings.public','count',1.00,NULL),(17337,1740880200,60,'cache_hit','settings.public','count',1.00,NULL),(17339,1741307760,60,'cache_miss','settings.public','count',10.00,NULL),(17340,1741307760,360,'cache_miss','settings.public','count',10.00,NULL),(17341,1741307040,1440,'cache_miss','settings.public','count',10.00,NULL),(17342,1741299840,10080,'cache_miss','settings.public','count',10.00,NULL),(17375,1741307820,60,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(17376,1741307760,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(17377,1741307040,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(17378,1741299840,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','count',1.00,NULL),(17387,1741307820,60,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1741307822.00,NULL),(17388,1741307760,360,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1741307822.00,NULL),(17389,1741307040,1440,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1741307822.00,NULL),(17390,1741299840,10080,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]','max',1741307822.00,NULL),(17403,1741307820,60,'cache_hit','settings.public','count',5.00,NULL),(17404,1741307760,360,'cache_hit','settings.public','count',7.00,NULL),(17405,1741307040,1440,'cache_hit','settings.public','count',16.00,NULL),(17406,1741299840,10080,'cache_hit','settings.public','count',18.00,NULL),(17423,1741307880,60,'cache_hit','settings.public','count',1.00,NULL),(17427,1741307940,60,'cache_hit','settings.public','count',1.00,NULL),(17431,1741308300,60,'cache_hit','settings.public','count',2.00,NULL),(17432,1741308120,360,'cache_hit','settings.public','count',9.00,NULL),(17439,1741308360,60,'cache_hit','settings.public','count',4.00,NULL),(17447,1741308360,60,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','count',1.00,NULL),(17448,1741308120,360,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','count',1.00,NULL),(17449,1741307040,1440,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','count',1.00,NULL),(17450,1741299840,10080,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','count',1.00,NULL),(17451,1741308360,60,'cache_miss','127.0.0.1','count',1.00,NULL),(17452,1741308120,360,'cache_miss','127.0.0.1','count',3.00,NULL),(17453,1741307040,1440,'cache_miss','127.0.0.1','count',3.00,NULL),(17454,1741299840,10080,'cache_miss','127.0.0.1','count',3.00,NULL),(17459,1741308360,60,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','max',8520.00,NULL),(17460,1741308120,360,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','max',8520.00,NULL),(17461,1741307040,1440,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','max',8520.00,NULL),(17462,1741299840,10080,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]','max',8520.00,NULL),(17463,1741308360,60,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','count',1.00,NULL),(17464,1741308120,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','count',1.00,NULL),(17465,1741307040,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','count',1.00,NULL),(17466,1741299840,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','count',1.00,NULL),(17467,1741308360,60,'cache_miss','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17468,1741308120,360,'cache_miss','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17469,1741307040,1440,'cache_miss','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17470,1741299840,10080,'cache_miss','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17471,1741308360,60,'cache_hit','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17472,1741308120,360,'cache_hit','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17473,1741307040,1440,'cache_hit','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17474,1741299840,10080,'cache_hit','a75f3f172bfb296f2e10cbfc6dfc1883','count',1.00,NULL),(17479,1741308360,60,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','max',2799.00,NULL),(17480,1741308120,360,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','max',2799.00,NULL),(17481,1741307040,1440,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','max',2799.00,NULL),(17482,1741299840,10080,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]','max',2799.00,NULL),(17483,1741308420,60,'cache_hit','settings.public','count',3.00,NULL),(17487,1741308420,60,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','count',2.00,NULL),(17488,1741308120,360,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','count',2.00,NULL),(17489,1741307040,1440,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','count',2.00,NULL),(17490,1741299840,10080,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','count',2.00,NULL),(17491,1741308420,60,'cache_miss','127.0.0.1','count',2.00,NULL),(17499,1741308420,60,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','max',3087.00,NULL),(17500,1741308120,360,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','max',3087.00,NULL),(17501,1741307040,1440,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','max',3087.00,NULL),(17502,1741299840,10080,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]','max',3087.00,NULL),(17519,1741308480,60,'cache_hit','settings.public','count',1.00,NULL),(17520,1741308480,360,'cache_hit','settings.public','count',2.00,NULL),(17521,1741308480,1440,'cache_hit','settings.public','count',2.00,NULL),(17523,1741308540,60,'cache_hit','settings.public','count',1.00,NULL);
+/*!40000 ALTER TABLE `pulse_aggregates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_entries`
+--
+
+DROP TABLE IF EXISTS `pulse_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_entries` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` int(10) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `value` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pulse_entries_timestamp_index` (`timestamp`),
+  KEY `pulse_entries_type_index` (`type`),
+  KEY `pulse_entries_key_hash_index` (`key_hash`),
+  KEY `pulse_entries_timestamp_type_key_hash_value_index` (`timestamp`,`type`,`key_hash`,`value`)
+) ENGINE=InnoDB AUTO_INCREMENT=4770 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_entries`
+--
+
+LOCK TABLES `pulse_entries` WRITE;
+/*!40000 ALTER TABLE `pulse_entries` DISABLE KEYS */;
+INSERT INTO `pulse_entries` (`id`, `timestamp`, `type`, `key`, `value`) VALUES (4215,1740265483,'cache_hit','settings.public',NULL),(4216,1740265542,'cache_hit','settings.public',NULL),(4217,1740265602,'cache_hit','settings.public',NULL),(4218,1740265662,'cache_hit','settings.public',NULL),(4219,1740265722,'cache_hit','settings.public',NULL),(4220,1740265783,'cache_hit','settings.public',NULL),(4221,1740265842,'cache_hit','settings.public',NULL),(4222,1740265902,'cache_hit','settings.public',NULL),(4223,1740265962,'cache_hit','settings.public',NULL),(4224,1740266011,'cache_hit','settings.public',NULL),(4225,1740266022,'cache_hit','settings.public',NULL),(4226,1740266082,'cache_hit','settings.public',NULL),(4227,1740266143,'cache_hit','settings.public',NULL),(4228,1740266202,'cache_hit','settings.public',NULL),(4229,1740266262,'cache_hit','settings.public',NULL),(4230,1740266323,'cache_hit','settings.public',NULL),(4231,1740266383,'cache_hit','settings.public',NULL),(4232,1740266442,'cache_hit','settings.public',NULL),(4233,1740266502,'cache_hit','settings.public',NULL),(4234,1740266562,'cache_hit','settings.public',NULL),(4235,1740266611,'cache_hit','settings.public',NULL),(4236,1740266622,'cache_hit','settings.public',NULL),(4237,1740266682,'cache_hit','settings.public',NULL),(4238,1740266742,'cache_hit','settings.public',NULL),(4239,1740266802,'cache_hit','settings.public',NULL),(4240,1740266862,'cache_hit','settings.public',NULL),(4241,1740266922,'cache_hit','settings.public',NULL),(4242,1740266982,'cache_hit','settings.public',NULL),(4243,1740267043,'cache_hit','settings.public',NULL),(4244,1740267103,'cache_hit','settings.public',NULL),(4245,1740272642,'cache_hit','settings.public',NULL),(4246,1740272643,'cache_hit','settings.public',NULL),(4247,1740272643,'cache_hit','settings.public',NULL),(4248,1740272643,'cache_hit','settings.public',NULL),(4249,1740272643,'cache_hit','settings.public',NULL),(4250,1740272643,'cache_hit','settings.public',NULL),(4251,1740272648,'cache_hit','settings.public',NULL),(4252,1740272648,'cache_hit','settings.public',NULL),(4253,1740272655,'cache_hit','settings.public',NULL),(4254,1740272655,'cache_hit','settings.public',NULL),(4255,1740272657,'cache_hit','settings.public',NULL),(4256,1740272657,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]',1740272657),(4257,1740272663,'cache_hit','settings.public',NULL),(4258,1740272668,'cache_hit','settings.public',NULL),(4259,1740272699,'cache_hit','settings.public',NULL),(4260,1740863004,'cache_miss','settings.public',NULL),(4261,1740863004,'cache_miss','settings.public',NULL),(4262,1740863004,'cache_miss','settings.public',NULL),(4263,1740863004,'cache_miss','settings.public',NULL),(4264,1740863004,'cache_miss','settings.public',NULL),(4265,1740863004,'cache_miss','settings.public',NULL),(4266,1740863004,'cache_miss','settings.public',NULL),(4267,1740863004,'cache_miss','settings.public',NULL),(4268,1740863013,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]',1740863013),(4269,1740863004,'cache_miss','settings.public',NULL),(4270,1740863019,'cache_hit','settings.public',NULL),(4271,1740863019,'cache_hit','settings.public',NULL),(4272,1740863019,'cache_hit','settings.public',NULL),(4273,1740863025,'cache_hit','settings.public',NULL),(4274,1740863060,'cache_hit','settings.public',NULL),(4275,1740863077,'cache_hit','settings.public',NULL),(4276,1740863136,'cache_hit','settings.public',NULL),(4277,1740863197,'cache_hit','settings.public',NULL),(4278,1740863257,'cache_hit','settings.public',NULL),(4279,1740863316,'cache_hit','settings.public',NULL),(4280,1740863377,'cache_hit','settings.public',NULL),(4281,1740863436,'cache_hit','settings.public',NULL),(4282,1740863497,'cache_hit','settings.public',NULL),(4283,1740863556,'cache_hit','settings.public',NULL),(4284,1740863558,'cache_hit','settings.public',NULL),(4285,1740863617,'cache_hit','settings.public',NULL),(4286,1740863676,'cache_hit','settings.public',NULL),(4287,1740863736,'cache_hit','settings.public',NULL),(4288,1740863796,'cache_hit','settings.public',NULL),(4289,1740863856,'cache_hit','settings.public',NULL),(4290,1740863916,'cache_hit','settings.public',NULL),(4291,1740863976,'cache_hit','settings.public',NULL),(4292,1740864036,'cache_hit','settings.public',NULL),(4293,1740864096,'cache_hit','settings.public',NULL),(4294,1740864158,'cache_hit','settings.public',NULL),(4295,1740864160,'cache_hit','settings.public',NULL),(4296,1740864217,'cache_hit','settings.public',NULL),(4297,1740864276,'cache_hit','settings.public',NULL),(4298,1740864336,'cache_hit','settings.public',NULL),(4299,1740864397,'cache_hit','settings.public',NULL),(4300,1740864456,'cache_hit','settings.public',NULL),(4301,1740864516,'cache_hit','settings.public',NULL),(4302,1740864577,'cache_hit','settings.public',NULL),(4303,1740864637,'cache_hit','settings.public',NULL),(4304,1740864666,'cache_hit','settings.public',NULL),(4305,1740864668,'cache_hit','settings.public',NULL),(4306,1740864696,'cache_hit','settings.public',NULL),(4307,1740864747,'user_request','1',NULL),(4308,1740864747,'cache_hit','settings.public',NULL),(4309,1740864748,'cache_miss','127.0.0.1',NULL),(4310,1740864751,'user_request','1',NULL),(4311,1740864752,'cache_hit','settings.public',NULL),(4312,1740864752,'cache_miss','127.0.0.1',NULL),(4313,1740864756,'cache_hit','settings.public',NULL),(4314,1740864757,'user_request','1',NULL),(4315,1740864757,'cache_hit','settings.public',NULL),(4316,1740864757,'cache_miss','127.0.0.1',NULL),(4317,1740864757,'cache_hit','settings.public',NULL),(4318,1740864760,'user_request','1',NULL),(4319,1740864760,'cache_hit','settings.public',NULL),(4320,1740864760,'cache_miss','127.0.0.1',NULL),(4321,1740864797,'user_request','1',NULL),(4322,1740864797,'cache_hit','settings.public',NULL),(4323,1740864797,'cache_miss','127.0.0.1',NULL),(4324,1740864800,'user_request','1',NULL),(4325,1740864801,'cache_hit','settings.public',NULL),(4326,1740864801,'cache_miss','127.0.0.1',NULL),(4327,1740864802,'user_request','1',NULL),(4328,1740864803,'cache_hit','settings.public',NULL),(4329,1740864803,'cache_miss','127.0.0.1',NULL),(4330,1740864805,'user_request','1',NULL),(4331,1740864806,'cache_hit','settings.public',NULL),(4332,1740864806,'cache_miss','127.0.0.1',NULL),(4333,1740864806,'user_request','1',NULL),(4334,1740864806,'cache_hit','settings.public',NULL),(4335,1740864806,'cache_miss','127.0.0.1',NULL),(4336,1740864809,'user_request','1',NULL),(4337,1740864810,'cache_hit','settings.public',NULL),(4338,1740864810,'cache_miss','127.0.0.1',NULL),(4339,1740864816,'cache_hit','settings.public',NULL),(4340,1740864876,'cache_hit','settings.public',NULL),(4341,1740864936,'cache_hit','settings.public',NULL),(4342,1740864955,'user_request','1',NULL),(4343,1740864955,'cache_hit','settings.public',NULL),(4344,1740864955,'cache_miss','127.0.0.1',NULL),(4345,1740864956,'user_request','1',NULL),(4346,1740864957,'cache_hit','settings.public',NULL),(4347,1740864957,'cache_miss','127.0.0.1',NULL),(4348,1740864957,'user_request','1',NULL),(4349,1740864958,'cache_hit','settings.public',NULL),(4350,1740864958,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4351,1740864958,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4352,1740864958,'user_request','1',NULL),(4353,1740864959,'cache_hit','settings.public',NULL),(4354,1740864959,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4355,1740864959,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4356,1740864959,'user_request','1',NULL),(4357,1740864960,'cache_hit','settings.public',NULL),(4358,1740864960,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4359,1740864960,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4360,1740864960,'user_request','1',NULL),(4361,1740864961,'cache_hit','settings.public',NULL),(4362,1740864961,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4363,1740864961,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4364,1740864961,'user_request','1',NULL),(4365,1740864961,'cache_hit','settings.public',NULL),(4366,1740864961,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4367,1740864961,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4368,1740864962,'user_request','1',NULL),(4369,1740864962,'cache_hit','settings.public',NULL),(4370,1740864962,'cache_miss','127.0.0.1',NULL),(4371,1740864963,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]',1845),(4372,1740864963,'slow_user_request','27',NULL),(4373,1740864963,'user_request','27',NULL),(4374,1740864965,'slow_outgoing_request','[\"GET\",\"https:\\/\\/middleware.bites.com\\/api\\/v1\\/auth\\/me\"]',1087),(4375,1740864965,'cache_hit','settings.public',NULL),(4376,1740864965,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4377,1740864965,'exception','[\"Illuminate\\\\Database\\\\QueryException\",\"app\\\\Services\\\\ProjectRepository.php:161\"]',1740864965),(4378,1740864965,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4379,1740864996,'cache_hit','settings.public',NULL),(4380,1740865008,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]',14431),(4381,1740865008,'slow_user_request','27',NULL),(4382,1740865008,'user_request','27',NULL),(4383,1740865009,'cache_hit','settings.public',NULL),(4384,1740865009,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4385,1740865022,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4386,1740865056,'cache_hit','settings.public',NULL),(4387,1740865077,'cache_hit','settings.public',NULL),(4388,1740865116,'cache_hit','settings.public',NULL),(4389,1740865132,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]',8790),(4390,1740865132,'slow_user_request','27',NULL),(4391,1740865132,'user_request','27',NULL),(4392,1740865132,'cache_hit','settings.public',NULL),(4393,1740865133,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4394,1740865140,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4395,1740865176,'cache_hit','settings.public',NULL),(4396,1740865236,'cache_hit','settings.public',NULL),(4397,1740865286,'cache_hit','settings.public',NULL),(4398,1740865293,'cache_hit','settings.public',NULL),(4399,1740865296,'cache_hit','settings.public',NULL),(4400,1740865306,'user_request','1',NULL),(4401,1740865307,'cache_hit','settings.public',NULL),(4402,1740865307,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4403,1740865307,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4404,1740865320,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]',1113),(4405,1740865320,'slow_user_request','1',NULL),(4406,1740865320,'user_request','1',NULL),(4407,1740865321,'cache_hit','settings.public',NULL),(4408,1740865321,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4409,1740865321,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4410,1740865341,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]',8415),(4411,1740865341,'slow_user_request','27',NULL),(4412,1740865341,'user_request','27',NULL),(4413,1740865342,'cache_hit','settings.public',NULL),(4414,1740865342,'cache_miss','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4415,1740865350,'cache_hit','b31f2dc02dd4f08939d07640ffc5c8eb',NULL),(4416,1740865356,'cache_hit','settings.public',NULL),(4417,1740865357,'cache_hit','settings.public',NULL),(4418,1740865362,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]',1648),(4419,1740865362,'slow_user_request','1',NULL),(4420,1740865362,'user_request','1',NULL),(4421,1740865363,'cache_hit','settings.public',NULL),(4422,1740865363,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4423,1740865363,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4424,1740865416,'cache_hit','settings.public',NULL),(4425,1740865476,'cache_hit','settings.public',NULL),(4426,1740865536,'cache_hit','settings.public',NULL),(4427,1740865596,'cache_hit','settings.public',NULL),(4428,1740865656,'cache_hit','settings.public',NULL),(4429,1740865670,'cache_hit','settings.public',NULL),(4430,1740865694,'cache_hit','settings.public',NULL),(4431,1740865716,'cache_hit','settings.public',NULL),(4432,1740865776,'cache_hit','settings.public',NULL),(4433,1740865793,'user_request','1',NULL),(4434,1740865794,'cache_hit','settings.public',NULL),(4435,1740865794,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4436,1740865794,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4437,1740865794,'user_request','1',NULL),(4438,1740865795,'cache_hit','settings.public',NULL),(4439,1740865795,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4440,1740865795,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4441,1740865795,'user_request','1',NULL),(4442,1740865795,'cache_hit','settings.public',NULL),(4443,1740865795,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4444,1740865795,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4445,1740865796,'user_request','1',NULL),(4446,1740865796,'cache_hit','settings.public',NULL),(4447,1740865796,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4448,1740865796,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4449,1740865836,'cache_hit','settings.public',NULL),(4450,1740865896,'cache_hit','settings.public',NULL),(4451,1740865957,'cache_hit','settings.public',NULL),(4452,1740865958,'cache_hit','settings.public',NULL),(4453,1740866016,'cache_hit','settings.public',NULL),(4454,1740866076,'cache_hit','settings.public',NULL),(4455,1740866136,'cache_hit','settings.public',NULL),(4456,1740866196,'cache_hit','settings.public',NULL),(4457,1740866256,'cache_hit','settings.public',NULL),(4458,1740866316,'cache_hit','settings.public',NULL),(4459,1740866376,'cache_hit','settings.public',NULL),(4460,1740866436,'cache_hit','settings.public',NULL),(4461,1740866496,'cache_hit','settings.public',NULL),(4462,1740866556,'cache_hit','settings.public',NULL),(4463,1740866557,'cache_hit','settings.public',NULL),(4464,1740866616,'cache_hit','settings.public',NULL),(4465,1740866676,'cache_hit','settings.public',NULL),(4466,1740866736,'cache_hit','settings.public',NULL),(4467,1740866796,'cache_hit','settings.public',NULL),(4468,1740866856,'cache_hit','settings.public',NULL),(4469,1740866916,'cache_hit','settings.public',NULL),(4470,1740866976,'cache_hit','settings.public',NULL),(4471,1740867036,'cache_hit','settings.public',NULL),(4472,1740867096,'cache_hit','settings.public',NULL),(4473,1740867156,'cache_hit','settings.public',NULL),(4474,1740867157,'cache_hit','settings.public',NULL),(4475,1740867216,'cache_hit','settings.public',NULL),(4476,1740867276,'cache_hit','settings.public',NULL),(4477,1740867336,'cache_hit','settings.public',NULL),(4478,1740867396,'cache_hit','settings.public',NULL),(4479,1740867456,'cache_hit','settings.public',NULL),(4480,1740867516,'cache_hit','settings.public',NULL),(4481,1740867576,'cache_hit','settings.public',NULL),(4482,1740867636,'cache_hit','settings.public',NULL),(4483,1740867696,'cache_hit','settings.public',NULL),(4484,1740867756,'cache_hit','settings.public',NULL),(4485,1740867757,'cache_hit','settings.public',NULL),(4486,1740867816,'cache_hit','settings.public',NULL),(4487,1740867876,'cache_hit','settings.public',NULL),(4488,1740867936,'cache_hit','settings.public',NULL),(4489,1740867996,'cache_hit','settings.public',NULL),(4490,1740868056,'cache_hit','settings.public',NULL),(4491,1740868116,'cache_hit','settings.public',NULL),(4492,1740868176,'cache_hit','settings.public',NULL),(4493,1740868236,'cache_hit','settings.public',NULL),(4494,1740868296,'cache_hit','settings.public',NULL),(4495,1740868356,'cache_hit','settings.public',NULL),(4496,1740868357,'cache_hit','settings.public',NULL),(4497,1740868416,'cache_hit','settings.public',NULL),(4498,1740868476,'cache_hit','settings.public',NULL),(4499,1740868536,'cache_hit','settings.public',NULL),(4500,1740868596,'cache_hit','settings.public',NULL),(4501,1740868656,'cache_hit','settings.public',NULL),(4502,1740868716,'cache_hit','settings.public',NULL),(4503,1740868776,'cache_hit','settings.public',NULL),(4504,1740868836,'cache_hit','settings.public',NULL),(4505,1740868896,'cache_hit','settings.public',NULL),(4506,1740868956,'cache_hit','settings.public',NULL),(4507,1740868957,'cache_hit','settings.public',NULL),(4508,1740869016,'cache_hit','settings.public',NULL),(4509,1740869076,'cache_hit','settings.public',NULL),(4510,1740869136,'cache_hit','settings.public',NULL),(4511,1740869196,'cache_hit','settings.public',NULL),(4512,1740869256,'cache_hit','settings.public',NULL),(4513,1740869316,'cache_hit','settings.public',NULL),(4514,1740869376,'cache_hit','settings.public',NULL),(4515,1740869436,'cache_hit','settings.public',NULL),(4516,1740869496,'cache_hit','settings.public',NULL),(4517,1740869556,'cache_hit','settings.public',NULL),(4518,1740869557,'cache_hit','settings.public',NULL),(4519,1740869616,'cache_hit','settings.public',NULL),(4520,1740869676,'cache_hit','settings.public',NULL),(4521,1740869736,'cache_hit','settings.public',NULL),(4522,1740869796,'cache_hit','settings.public',NULL),(4523,1740869856,'cache_hit','settings.public',NULL),(4524,1740869916,'cache_hit','settings.public',NULL),(4525,1740869976,'cache_hit','settings.public',NULL),(4526,1740870036,'cache_hit','settings.public',NULL),(4527,1740870096,'cache_hit','settings.public',NULL),(4528,1740870156,'cache_hit','settings.public',NULL),(4529,1740870157,'cache_hit','settings.public',NULL),(4530,1740870217,'cache_hit','settings.public',NULL),(4531,1740870276,'cache_hit','settings.public',NULL),(4532,1740870336,'cache_hit','settings.public',NULL),(4533,1740870396,'cache_hit','settings.public',NULL),(4534,1740870456,'cache_hit','settings.public',NULL),(4535,1740870517,'cache_hit','settings.public',NULL),(4536,1740870577,'cache_hit','settings.public',NULL),(4537,1740870637,'cache_hit','settings.public',NULL),(4538,1740870696,'cache_hit','settings.public',NULL),(4539,1740870756,'cache_hit','settings.public',NULL),(4540,1740870757,'cache_hit','settings.public',NULL),(4541,1740876440,'cache_hit','settings.public',NULL),(4542,1740876441,'cache_hit','settings.public',NULL),(4543,1740876441,'cache_hit','settings.public',NULL),(4544,1740876441,'cache_hit','settings.public',NULL),(4545,1740876441,'cache_hit','settings.public',NULL),(4546,1740876442,'cache_hit','settings.public',NULL),(4547,1740876446,'cache_hit','settings.public',NULL),(4548,1740876447,'cache_hit','settings.public',NULL),(4549,1740876453,'cache_hit','settings.public',NULL),(4550,1740876453,'cache_hit','settings.public',NULL),(4551,1740876455,'cache_hit','settings.public',NULL),(4552,1740876456,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]',1740876456),(4553,1740876461,'cache_hit','settings.public',NULL),(4554,1740876467,'cache_hit','settings.public',NULL),(4555,1740876500,'cache_hit','settings.public',NULL),(4556,1740876558,'cache_hit','settings.public',NULL),(4557,1740876618,'cache_hit','settings.public',NULL),(4558,1740876678,'cache_hit','settings.public',NULL),(4559,1740876738,'cache_hit','settings.public',NULL),(4560,1740876798,'cache_hit','settings.public',NULL),(4561,1740876858,'cache_hit','settings.public',NULL),(4562,1740876918,'cache_hit','settings.public',NULL),(4563,1740876978,'cache_hit','settings.public',NULL),(4564,1740877038,'cache_hit','settings.public',NULL),(4565,1740877040,'cache_hit','settings.public',NULL),(4566,1740877098,'cache_hit','settings.public',NULL),(4567,1740877158,'cache_hit','settings.public',NULL),(4568,1740877218,'cache_hit','settings.public',NULL),(4569,1740877278,'cache_hit','settings.public',NULL),(4570,1740877338,'cache_hit','settings.public',NULL),(4571,1740877399,'cache_hit','settings.public',NULL),(4572,1740877458,'cache_hit','settings.public',NULL),(4573,1740877518,'cache_hit','settings.public',NULL),(4574,1740877578,'cache_hit','settings.public',NULL),(4575,1740877638,'cache_hit','settings.public',NULL),(4576,1740877641,'cache_hit','settings.public',NULL),(4577,1740877698,'cache_hit','settings.public',NULL),(4578,1740877758,'cache_hit','settings.public',NULL),(4579,1740877818,'cache_hit','settings.public',NULL),(4580,1740877878,'cache_hit','settings.public',NULL),(4581,1740877927,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]',1740877927),(4582,1740877938,'cache_hit','settings.public',NULL),(4583,1740877960,'exception','[\"ErrorException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:56\"]',1740877960),(4584,1740877977,'user_request','1',NULL),(4585,1740877978,'cache_hit','settings.public',NULL),(4586,1740877978,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4587,1740877978,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4588,1740877998,'cache_hit','settings.public',NULL),(4589,1740878021,'user_request','1',NULL),(4590,1740878022,'cache_hit','settings.public',NULL),(4591,1740878022,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4592,1740878022,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4593,1740878060,'cache_hit','settings.public',NULL),(4594,1740878049,'slow_request','[\"POST\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@store\"]',15256),(4595,1740878049,'slow_user_request','1',NULL),(4596,1740878049,'user_request','1',NULL),(4597,1740878050,'cache_hit','settings.public',NULL),(4598,1740878050,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4599,1740878064,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4600,1740878075,'user_request','1',NULL),(4601,1740878076,'cache_hit','settings.public',NULL),(4602,1740878076,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4603,1740878076,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4604,1740878118,'cache_hit','settings.public',NULL),(4605,1740878178,'cache_hit','settings.public',NULL),(4606,1740878197,'exception','[\"Illuminate\\\\Http\\\\Client\\\\ConnectionException\",\"app\\\\Http\\\\Middleware\\\\CheckAuthUser.php:65\"]',1740878197),(4607,1740878225,'user_request','1',NULL),(4608,1740878226,'cache_hit','settings.public',NULL),(4609,1740878226,'cache_miss','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4610,1740878226,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4611,1740878234,'slow_request','[\"GET\",\"\\/api\\/v1\\/projects\",\"App\\\\Http\\\\Controllers\\\\ProjectsController@index\"]',1086),(4612,1740878234,'slow_user_request','1',NULL),(4613,1740878234,'user_request','1',NULL),(4614,1740878235,'cache_hit','settings.public',NULL),(4615,1740878235,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4616,1740878235,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4617,1740878238,'cache_hit','settings.public',NULL),(4618,1740878240,'cache_hit','settings.public',NULL),(4619,1740878244,'user_request','1',NULL),(4620,1740878244,'cache_hit','settings.public',NULL),(4621,1740878244,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4622,1740878244,'cache_hit','f1f70ec40aaa556905d4a030501c0ba4',NULL),(4623,1740878298,'cache_hit','settings.public',NULL),(4624,1740878358,'cache_hit','settings.public',NULL),(4625,1740878418,'cache_hit','settings.public',NULL),(4626,1740878478,'cache_hit','settings.public',NULL),(4627,1740878538,'cache_hit','settings.public',NULL),(4628,1740878598,'cache_hit','settings.public',NULL),(4629,1740878659,'cache_hit','settings.public',NULL),(4630,1740878718,'cache_hit','settings.public',NULL),(4631,1740878778,'cache_hit','settings.public',NULL),(4632,1740878838,'cache_hit','settings.public',NULL),(4633,1740878840,'cache_hit','settings.public',NULL),(4634,1740878898,'cache_hit','settings.public',NULL),(4635,1740878958,'cache_hit','settings.public',NULL),(4636,1740879018,'cache_hit','settings.public',NULL),(4637,1740879078,'cache_hit','settings.public',NULL),(4638,1740879138,'cache_hit','settings.public',NULL),(4639,1740879198,'cache_hit','settings.public',NULL),(4640,1740879258,'cache_hit','settings.public',NULL),(4641,1740879318,'cache_hit','settings.public',NULL),(4642,1740879378,'cache_hit','settings.public',NULL),(4643,1740879438,'cache_hit','settings.public',NULL),(4644,1740879440,'cache_hit','settings.public',NULL),(4645,1740879498,'cache_hit','settings.public',NULL),(4646,1740879558,'cache_hit','settings.public',NULL),(4647,1740879618,'cache_hit','settings.public',NULL),(4648,1740879678,'cache_hit','settings.public',NULL),(4649,1740879738,'cache_hit','settings.public',NULL),(4650,1740879798,'cache_hit','settings.public',NULL),(4651,1740879858,'cache_hit','settings.public',NULL),(4652,1740879918,'cache_hit','settings.public',NULL),(4653,1740879978,'cache_hit','settings.public',NULL),(4654,1740880038,'cache_hit','settings.public',NULL),(4655,1740880040,'cache_hit','settings.public',NULL),(4656,1740880098,'cache_hit','settings.public',NULL),(4657,1740880158,'cache_hit','settings.public',NULL),(4658,1740880218,'cache_hit','settings.public',NULL),(4729,1741307817,'cache_miss','settings.public',NULL),(4730,1741307817,'cache_miss','settings.public',NULL),(4733,1741307817,'cache_miss','settings.public',NULL),(4734,1741307817,'cache_miss','settings.public',NULL),(4735,1741307817,'cache_miss','settings.public',NULL),(4736,1741307817,'cache_miss','settings.public',NULL),(4738,1741307817,'cache_miss','settings.public',NULL),(4739,1741307822,'exception','[\"Error\",\"vendor\\\\bites-development\\\\bites-connector\\\\src\\\\Controllers\\\\SnsController.php:16\"]',1741307822),(4740,1741307817,'cache_miss','settings.public',NULL),(4741,1741307817,'cache_miss','settings.public',NULL),(4742,1741307817,'cache_miss','settings.public',NULL),(4743,1741307829,'cache_hit','settings.public',NULL),(4744,1741307829,'cache_hit','settings.public',NULL),(4745,1741307830,'cache_hit','settings.public',NULL),(4746,1741307834,'cache_hit','settings.public',NULL),(4747,1741307839,'cache_hit','settings.public',NULL),(4748,1741307885,'cache_hit','settings.public',NULL),(4749,1741307945,'cache_hit','settings.public',NULL),(4750,1741308337,'cache_hit','settings.public',NULL),(4751,1741308353,'cache_hit','settings.public',NULL),(4752,1741308367,'cache_hit','settings.public',NULL),(4753,1741308367,'cache_hit','settings.public',NULL),(4754,1741308399,'slow_request','[\"GET\",\"\\/\",\"App\\\\Http\\\\Controllers\\\\LandingPageController\"]',8520),(4755,1741308402,'cache_hit','settings.public',NULL),(4756,1741308406,'cache_miss','127.0.0.1',NULL),(4757,1741308412,'slow_request','[\"GET\",\"\\/api\\/v1\\/value-lists\\/{names}\",\"Common\\\\Core\\\\Values\\\\ValueListsController@index\"]',2799),(4758,1741308413,'cache_hit','settings.public',NULL),(4759,1741308414,'cache_miss','a75f3f172bfb296f2e10cbfc6dfc1883',NULL),(4760,1741308414,'cache_hit','a75f3f172bfb296f2e10cbfc6dfc1883',NULL),(4761,1741308426,'cache_hit','settings.public',NULL),(4762,1741308463,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]',3087),(4763,1741308465,'cache_hit','settings.public',NULL),(4764,1741308466,'cache_miss','127.0.0.1',NULL),(4765,1741308466,'slow_request','[\"GET\",\"\\/{fallbackPlaceholder}\",\"Common\\\\Core\\\\Controllers\\\\HomeController@render\"]',1162),(4766,1741308467,'cache_hit','settings.public',NULL),(4767,1741308467,'cache_miss','127.0.0.1',NULL),(4768,1741308485,'cache_hit','settings.public',NULL),(4769,1741308546,'cache_hit','settings.public',NULL);
+/*!40000 ALTER TABLE `pulse_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pulse_values`
+--
+
+DROP TABLE IF EXISTS `pulse_values`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pulse_values` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` int(10) unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `key` mediumtext NOT NULL,
+  `key_hash` binary(16) GENERATED ALWAYS AS (unhex(md5(`key`))) VIRTUAL,
+  `value` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pulse_values_type_key_hash_unique` (`type`,`key_hash`),
+  KEY `pulse_values_timestamp_index` (`timestamp`),
+  KEY `pulse_values_type_index` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pulse_values`
+--
+
+LOCK TABLES `pulse_values` WRITE;
+/*!40000 ALTER TABLE `pulse_values` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pulse_values` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `default` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `guests` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `type` varchar(20) NOT NULL DEFAULT 'sitewide',
+  `internal` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groups_name_unique` (`name`),
+  KEY `groups_default_index` (`default`),
+  KEY `groups_guests_index` (`guests`),
+  KEY `roles_internal_index` (`internal`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'Workspace Admin',NULL,0,0,'2024-11-10 17:38:07','2024-11-10 17:38:07','Manage all workspace resources, invite and manage members.','workspace',0),(2,'Workspace Editor',NULL,0,0,'2024-11-10 17:38:07','2024-11-10 17:38:07','Manage all workspace resources, regardless of resource owner.','workspace',0),(3,'Workspace Member',NULL,0,0,'2024-11-10 17:38:07','2024-11-10 17:38:07','Create workspace resources, but can\'t edit or delete resources owned by other members.','workspace',0),(4,'users',NULL,1,0,'2025-02-12 20:37:10','2025-02-12 20:37:10',NULL,'sitewide',1),(5,'guests',NULL,0,1,'2025-02-12 20:37:10','2025-02-12 20:37:10',NULL,'sitewide',1);
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schedule_log`
+--
+
+DROP TABLE IF EXISTS `schedule_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `schedule_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `command` varchar(255) NOT NULL,
+  `output` text DEFAULT NULL,
+  `ran_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `duration` int(10) unsigned NOT NULL,
+  `count_in_last_hour` int(11) NOT NULL DEFAULT 1,
+  `exit_code` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `schedule_log_command_index` (`command`),
+  KEY `schedule_log_ran_at_index` (`ran_at`),
+  KEY `schedule_log_duration_index` (`duration`),
+  KEY `schedule_log_exit_code_index` (`exit_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedule_log`
+--
+
+LOCK TABLES `schedule_log` WRITE;
+/*!40000 ALTER TABLE `schedule_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `value` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `private` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `settings_name_unique` (`name`),
+  KEY `settings_private_index` (`private`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settings`
+--
+
+LOCK TABLES `settings` WRITE;
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES (1,'dates.format','short','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(2,'dates.locale','en_US','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(3,'dates.default_timezone','auto','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(4,'locale.default','auto','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(5,'social.google.enable','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(6,'social.twitter.enable','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(7,'social.facebook.enable','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(8,'social.compact_buttons','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(9,'realtime.enable','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(10,'registration.disable','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(11,'cache.report_minutes','60','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(12,'i18n.default_localization','en','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(13,'i18n.enable','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(14,'logging.sentry_public','','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(15,'realtime.pusher_key','','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(16,'homepage.type','default','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(17,'themes.user_change','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(18,'themes.default_id','0','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(19,'billing.enable','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(20,'billing.paypal_test_mode','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(21,'billing.stripe_test_mode','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(22,'billing.stripe.enable','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(23,'billing.paypal.enable','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(24,'billing.accepted_cards','[\"visa\",\"mastercard\",\"american-express\",\"discover\"]','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(25,'uploads.chunk','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(26,'uploads.chunk_size','5242880','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(27,'cookie_notice.enable','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(28,'cookie_notice.position','bottom','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(29,'branding.logo_dark','images/logo-dark.png','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(30,'branding.logo_light','images/logo-light.png','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(31,'menus','[{\"positions\":[\"dashboard\"],\"name\":\"Dashboard\",\"id\":\"5vpqoq\",\"items\":[{\"type\":\"route\",\"permissions\":[\"admin\"],\"position\":0,\"label\":\"Admin Area\",\"action\":\"\\/admin\",\"id\":311},{\"type\":\"route\",\"position\":1,\"label\":\"Projects\",\"action\":\"\\/dashboard\",\"id\":234},{\"type\":\"route\",\"position\":2,\"label\":\"Branded domains\",\"action\":\"\\/dashboard\\/domains\",\"id\":235}]},{\"name\":\"Footer\",\"id\":\"4tbwog\",\"positions\":[\"footer\"],\"items\":[{\"type\":\"route\",\"id\":\"rlz27v\",\"position\":2,\"label\":\"Privacy Policy\",\"action\":\"\\/pages\\/privacy-policy\"},{\"type\":\"route\",\"id\":\"p80pvk\",\"position\":3,\"label\":\"Terms of Service\",\"action\":\"\\/pages\\/terms-of-service\"},{\"type\":\"route\",\"id\":\"q8dtht\",\"position\":4,\"label\":\"Contact Us\",\"action\":\"\\/contact\"}]},{\"name\":\"Footer Social\",\"id\":\"odw4ah\",\"positions\":[\"footer-secondary\"],\"items\":[{\"type\":\"link\",\"id\":\"6j747e\",\"position\":1,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h7.621v-6.961h-2.343v-2.725h2.343V9.309c0-2.324 1.421-3.591 3.495-3.591.699-.002 1.397.034 2.092.105v2.43H16.78c-1.13 0-1.35.534-1.35 1.322v1.735h2.7l-.351 2.725h-2.365V21H19a2 2 0 002-2V5a2 2 0 00-2-2z\"}}],\"action\":\"https:\\/\\/facebook.com\"},{\"type\":\"link\",\"id\":\"jo96zw\",\"position\":2,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M24 4.3c-.898.4-1.8.7-2.8.802 1-.602 1.8-1.602 2.198-2.704-1 .602-2 1-3.097 1.204C19.3 2.602 18 2 16.6 2a4.907 4.907 0 00-4.9 4.898c0 .403 0 .801.102 1.102C7.7 7.8 4.102 5.898 1.7 2.898c-.5.704-.7 1.602-.7 2.5 0 1.704.898 3.204 2.2 4.102-.802-.102-1.598-.3-2.2-.602V9c0 2.398 1.7 4.398 3.898 4.8-.398.098-.796.2-1.296.2-.301 0-.602 0-.903-.102.602 2 2.403 3.403 4.602 3.403-1.7 1.3-3.801 2.097-6.102 2.097-.398 0-.8 0-1.199-.097C2.2 20.699 4.8 21.5 7.5 21.5c9.102 0 14-7.5 14-14v-.602c1-.699 1.8-1.597 2.5-2.597\"}}],\"action\":\"https:\\/\\/twitter.com\"},{\"type\":\"link\",\"id\":\"57dsea\",\"position\":3,\"action\":\"https:\\/\\/instagram.com\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913a5.885 5.885 0 001.384 2.126A5.868 5.868 0 004.14 23.37c.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558a5.898 5.898 0 002.126-1.384 5.86 5.86 0 001.384-2.126c.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913a5.89 5.89 0 00-1.384-2.126A5.847 5.847 0 0019.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227a3.81 3.81 0 01-.899 1.382 3.744 3.744 0 01-1.38.896c-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421a3.716 3.716 0 01-1.379-.899 3.644 3.644 0 01-.9-1.38c-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z\"}}]},{\"type\":\"link\",\"id\":\"lzntr2\",\"position\":4,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M5.68 2l1.478 5.344v2.562H8.44V7.344L9.937 2h-1.29l-.538 2.432a27.21 27.21 0 00-.29 1.515h-.04c-.063-.42-.159-.93-.29-1.525L6.97 2H5.68zm5.752 2.018c-.434 0-.784.084-1.051.257-.267.172-.464.448-.59.825-.125.377-.187.876-.187 1.498v.84c0 .615.054 1.107.164 1.478.11.371.295.644.556.82.261.176.62.264 1.078.264.446 0 .8-.087 1.06-.26.26-.173.45-.444.565-.818.116-.374.174-.869.174-1.485v-.84c0-.62-.059-1.118-.178-1.492-.119-.373-.308-.648-.566-.824-.258-.176-.598-.263-1.025-.263zm2.447.113v4.314c0 .534.09.927.271 1.178.182.251.465.377.848.377.552 0 .968-.267 1.244-.8h.028l.113.706H17.4V4.131h-1.298v4.588a.635.635 0 01-.23.263.569.569 0 01-.325.104c-.132 0-.226-.054-.283-.164-.057-.11-.086-.295-.086-.553V4.131h-1.3zm-2.477.781c.182 0 .311.095.383.287.072.191.108.495.108.91v1.8c0 .426-.036.735-.108.923-.072.188-.2.282-.38.283-.183 0-.309-.095-.378-.283-.07-.188-.103-.497-.103-.924V6.11c0-.414.035-.718.107-.91.072-.19.195-.287.371-.287zM5 11c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2H5zm7.049 2h1.056v2.568h.008c.095-.186.232-.335.407-.449.175-.114.364-.17.566-.17.26 0 .463.07.611.207.148.138.257.361.323.668.066.308.097.735.097 1.281v.772h.002c0 .727-.089 1.26-.264 1.602-.175.342-.447.513-.818.513-.207 0-.394-.047-.564-.142a.93.93 0 01-.383-.391h-.024l-.11.46h-.907V13zm-6.563.246h3.252v.885h-1.09v5.789H6.576v-5.79h-1.09v-.884zm11.612 1.705c.376 0 .665.07.867.207.2.138.343.354.426.645.082.292.123.695.123 1.209v.836h-1.836v.248c0 .313.008.547.027.703.02.156.057.27.115.342.058.072.148.107.27.107.164 0 .277-.064.338-.191.06-.127.094-.338.1-.635l.947.055a1.6 1.6 0 01.007.175c0 .451-.124.788-.37 1.01-.248.223-.595.334-1.046.334-.54 0-.92-.17-1.138-.51-.218-.339-.326-.863-.326-1.574v-.851c0-.732.112-1.267.337-1.604.225-.337.613-.506 1.159-.506zm-8.688.094h1.1v3.58c0 .217.024.373.072.465.048.093.126.139.238.139a.486.486 0 00.276-.088.538.538 0 00.193-.223v-3.873h1.1v4.875h-.862l-.093-.598h-.026c-.234.452-.584.678-1.05.678-.325 0-.561-.106-.715-.318-.154-.212-.233-.544-.233-.994v-3.643zm8.664.648c-.117 0-.204.036-.26.104-.056.069-.093.182-.11.338a6.504 6.504 0 00-.028.71v.35h.803v-.35c0-.312-.01-.548-.032-.71-.02-.162-.059-.276-.115-.342-.056-.066-.14-.1-.258-.1zm-3.482.036a.418.418 0 00-.293.126.699.699 0 00-.192.327v2.767a.487.487 0 00.438.256.337.337 0 00.277-.127c.07-.085.12-.228.149-.43.029-.2.043-.48.043-.835v-.627c0-.382-.011-.676-.035-.883-.024-.207-.067-.357-.127-.444a.299.299 0 00-.26-.13z\"}}],\"action\":\"https:\\/\\/youtube.com\"}]},{\"name\":\"Auth Dropdown\",\"id\":\"h8r6vg\",\"items\":[{\"label\":\"Admin Area\",\"id\":\"upm1rv\",\"action\":\"\\/admin\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9 17v2H5v-2h4M21 3h-8v6h8V3zM11 3H3v10h8V3zm10 8h-8v10h8V11zm-10 4H3v6h8v-6z\"}}],\"permissions\":[\"admin.access\"]},{\"label\":\"Dashboard\",\"id\":\"ehj0uk\",\"action\":\"\\/dashboard\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8z\"}}]},{\"label\":\"Account Settings\",\"id\":\"6a89z5\",\"action\":\"\\/account-settings\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z\"}}]}],\"positions\":[\"auth-dropdown\"]},{\"name\":\"Admin Sidebar\",\"id\":\"2d43u1\",\"items\":[{\"label\":\"Analytics\",\"id\":\"886nz4\",\"action\":\"\\/admin\",\"type\":\"route\",\"condition\":\"admin\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M7 12h2v5H7zm8-5h2v10h-2zm-4 7h2v3h-2zm0-4h2v2h-2z\"}}],\"role\":1,\"permissions\":[\"admin.access\"],\"roles\":[]},{\"label\":\"Appearance\",\"id\":\"slcqm0\",\"action\":\"\\/admin\\/appearance\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"m2.53 19.65 1.34.56v-9.03l-2.43 5.86c-.41 1.02.08 2.19 1.09 2.61zm19.5-3.7L17.07 3.98c-.31-.75-1.04-1.21-1.81-1.23-.26 0-.53.04-.79.15L7.1 5.95c-.75.31-1.21 1.03-1.23 1.8-.01.27.04.54.15.8l4.96 11.97c.31.76 1.05 1.22 1.83 1.23.26 0 .52-.05.77-.15l7.36-3.05c1.02-.42 1.51-1.59 1.09-2.6zm-9.2 3.8L7.87 7.79l7.35-3.04h.01l4.95 11.95-7.35 3.05z\"}},{\"tag\":\"circle\",\"attr\":{\"cx\":\"11\",\"cy\":\"9\",\"r\":\"1\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M5.88 19.75c0 1.1.9 2 2 2h1.45l-3.45-8.34v6.34z\"}}],\"permissions\":[\"appearance.update\"]},{\"label\":\"Settings\",\"id\":\"x5k484\",\"action\":\"\\/admin\\/settings\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z\"}}],\"permissions\":[\"settings.update\"]},{\"label\":\"Plans\",\"id\":\"7o42rt\",\"action\":\"\\/admin\\/plans\",\"type\":\"route\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M7 15h7v2H7zm0-4h10v2H7zm0-4h10v2H7zm12-4h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-.14 0-.27.01-.4.04-.39.08-.74.28-1.01.55-.18.18-.33.4-.43.64-.1.23-.16.49-.16.77v14c0 .27.06.54.16.78s.25.45.43.64c.27.27.62.47 1.01.55.13.02.26.03.4.03h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7-.25c.41 0 .75.34.75.75s-.34.75-.75.75-.75-.34-.75-.75.34-.75.75-.75zM19 19H5V5h14v14z\"}}],\"permissions\":[\"plans.update\"]},{\"label\":\"Subscriptions\",\"action\":\"\\/admin\\/subscriptions\",\"type\":\"route\",\"id\":\"sdcb5a\",\"condition\":\"admin\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M4 6h16v2H4zm2-4h12v2H6zm14 8H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm0 10H4v-8h16v8zm-10-7.27v6.53L16 16z\"}}],\"permissions\":[\"subscriptions.update\"]},{\"label\":\"Users\",\"action\":\"\\/admin\\/users\",\"type\":\"route\",\"id\":\"fzfb45\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\"}}],\"permissions\":[\"users.update\"]},{\"label\":\"Roles\",\"action\":\"\\/admin\\/roles\",\"type\":\"route\",\"id\":\"mwdkf0\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M9 13.75c-2.34 0-7 1.17-7 3.5V19h14v-1.75c0-2.33-4.66-3.5-7-3.5zM4.34 17c.84-.58 2.87-1.25 4.66-1.25s3.82.67 4.66 1.25H4.34zM9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12zm0-5c.83 0 1.5.67 1.5 1.5S9.83 10 9 10s-1.5-.67-1.5-1.5S8.17 7 9 7zm7.04 6.81c1.16.84 1.96 1.96 1.96 3.44V19h4v-1.75c0-2.02-3.5-3.17-5.96-3.44zM15 12c1.93 0 3.5-1.57 3.5-3.5S16.93 5 15 5c-.54 0-1.04.13-1.5.35.63.89 1 1.98 1 3.15s-.37 2.26-1 3.15c.46.22.96.35 1.5.35z\"}}],\"permissions\":[\"roles.update\"]},{\"type\":\"route\",\"label\":\"Projects\",\"action\":\"\\/admin\\/projects\",\"id\":2394,\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9 17v2H5v-2h4M21 3h-8v6h8V3zM11 3H3v10h8V3zm10 8h-8v10h8V11zm-10 4H3v6h8v-6z\"}}]},{\"type\":\"route\",\"label\":\"Templates\",\"action\":\"\\/admin\\/templates\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 9h10.5v3.5H4V9zm0 5.5h10.5V18H4v-3.5zM20 18h-3.5V9H20v9z\"}}],\"id\":5864},{\"type\":\"route\",\"label\":\"Branded Domains\",\"action\":\"\\/admin\\/custom-domains\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z\"}}],\"id\":4441},{\"label\":\"Pages\",\"action\":\"\\/admin\\/custom-pages\",\"type\":\"route\",\"id\":\"63bwv9\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z\"}}],\"permissions\":[\"custom_pages.update\"]},{\"label\":\"Files\",\"action\":\"\\/admin\\/files\",\"type\":\"route\",\"id\":\"vguvti\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4H8c-1.1 0-1.99.9-1.99 2L6 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V11l-6-6zM8 21V7h6v5h5v9H8z\"}}],\"permissions\":[\"files.update\"]},{\"label\":\"Localizations\",\"action\":\"\\/admin\\/localizations\",\"type\":\"route\",\"id\":\"w91yql\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"m12.87 15.07-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7 1.62-4.33L19.12 17h-3.24z\"}}],\"permissions\":[\"localizations.update\"]},{\"label\":\"Ads\",\"action\":\"\\/admin\\/ads\",\"type\":\"route\",\"id\":\"ohj4qk\",\"icon\":[{\"tag\":\"path\",\"attr\":{\"d\":\"M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zM7 4V3h10v1H7zm0 14V6h10v12H7zm0 3v-1h10v1H7z\"}},{\"tag\":\"path\",\"attr\":{\"d\":\"M16 7H8v2h8V7z\"}}],\"permissions\":[\"settings.update\"]}],\"positions\":[\"admin-sidebar\"]},{\"name\":\"Homepage navbar\",\"id\":\"5vgq1a\",\"positions\":[\"homepage-navbar\"],\"items\":[{\"type\":\"link\",\"label\":\"Features\",\"action\":\"#features\",\"id\":19041},{\"type\":\"link\",\"label\":\"Pricing\",\"action\":\"#pricing\",\"id\":190456}]}]','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(32,'branding.site_name','Architect','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(33,'builder.enable_subdomains','false','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(34,'builder.enable_custom_domains','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(35,'builder.googgle_fonts_api_key','AIzaSyDhc_8NKxXjtv69htFcUPe6A7oGSQ4om2o','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(36,'builder.template_categories','[\"Landing Page\",\"Blog\",\"Portfolio\"]','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(37,'publish.allow_credential_change','true','2025-02-12 20:37:22','2025-02-12 20:37:22',0),(38,'homepage.appearance','{\"headerTitle\":\"Create a Website You\'re Proud Of\",\"headerSubtitle\":\"Discover the platform that gives you the freedom to create, design, manage and develop your web presence exactly the way you want.\",\"headerImage\":\"images\\/landing\\/landing-bg.svg\",\"headerImageOpacity\":1,\"headerOverlayColor1\":null,\"headerOverlayColor2\":null,\"footerTitle\":\"Build your website today\",\"footerSubtitle\":null,\"footerImage\":\"images\\/landing\\/landing-bg.svg\",\"pricingTitle\":\"Simple pricing, for everyone.\",\"pricingSubtitle\":\"It doesn\'t matter what size your business is, we offer a simple pricing model that scales with your needs.\",\"actions\":{\"cta1\":{\"type\":\"route\",\"action\":\"\\/pricing\",\"label\":\"Start Now\"},\"cta3\":{\"label\":\"Sign up for free\",\"type\":\"route\",\"action\":\"\\/register\"}},\"primaryFeatures\":[{\"title\":\"Custom domains\",\"subtitle\":\"Attach your own custom domain or use on of the free architect subdomains.\",\"image\":\"images\\/landing\\/world.svg\"},{\"title\":\"Eye-catching website designs\",\"subtitle\":\"Our easy-to-use builder helps you create and launch a beautiful websites fast.\",\"image\":\"images\\/landing\\/website-builder.svg\"},{\"title\":\"Grow with powerful tools\",\"subtitle\":\"Design and build your own high-quality websites. Whatever the type of site, you can do it with Architect website builder.\",\"image\":\"images\\/landing\\/pen-tool.svg\"}],\"secondaryFeatures\":[{\"title\":\"Look like an expert right from the start.\",\"subtitle\":\"AWARD-WINNING WEBSITE DESIGN\",\"image\":\"images\\/landing\\/landing-feature-1.webp\",\"description\":\"Our award-winning templates are the most beautiful way to present your ideas online. Stand out with a professional website, portfolio, or online store.\"},{\"title\":\"The Freedom to Create the Websites You Want\",\"subtitle\":\"Complete Freedom\",\"image\":\"images\\/landing\\/landing-feature-2.webp\",\"description\":\"Start from scratch or choose from large catalog of templates to make your own website. With the world\'s most innovative drag and drop website builder, you can customize or change anything. With the Architect, you can create your own professional website that looks stunning.\"}]}','2025-02-12 20:37:22','2025-02-12 20:37:22',0);
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sns_logs`
+--
+
+DROP TABLE IF EXISTS `sns_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sns_logs` (
+  `id` char(36) NOT NULL,
+  `message` text NOT NULL,
+  `message_identifier` varchar(255) NOT NULL,
+  `message_type` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  UNIQUE KEY `sns_logs_message_identifier_unique` (`message_identifier`),
+  KEY `sns_logs_message_type_index` (`message_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sns_logs`
+--
+
+LOCK TABLES `sns_logs` WRITE;
+/*!40000 ALTER TABLE `sns_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sns_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_profiles`
+--
+
+DROP TABLE IF EXISTS `social_profiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `social_profiles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `service_name` varchar(20) NOT NULL,
+  `user_service_id` varchar(255) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `access_token` text DEFAULT NULL,
+  `refresh_token` text DEFAULT NULL,
+  `access_expires_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `social_profiles_user_id_service_name_unique` (`user_id`,`service_name`),
+  UNIQUE KEY `social_profiles_service_name_user_service_id_unique` (`service_name`,`user_service_id`),
+  KEY `social_profiles_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `social_profiles`
+--
+
+LOCK TABLES `social_profiles` WRITE;
+/*!40000 ALTER TABLE `social_profiles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `subscriptions`
+--
+
+DROP TABLE IF EXISTS `subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subscriptions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `price_id` varchar(255) NOT NULL,
+  `gateway_name` varchar(255) NOT NULL DEFAULT 'none',
+  `gateway_id` varchar(255) DEFAULT NULL,
+  `gateway_status` varchar(40) NOT NULL DEFAULT 'active',
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `description` text DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  `renews_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `product_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `subscriptions_gateway_id_unique` (`gateway_id`),
+  KEY `subscriptions_user_id_index` (`user_id`),
+  KEY `subscriptions_plan_id_index` (`price_id`),
+  KEY `subscriptions_gateway_index` (`gateway_name`),
+  KEY `subscriptions_product_id_index` (`product_id`),
+  KEY `subscriptions_gateway_status_index` (`gateway_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `subscriptions`
+--
+
+LOCK TABLES `subscriptions` WRITE;
+/*!40000 ALTER TABLE `subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taggables`
+--
+
+DROP TABLE IF EXISTS `taggables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `taggables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tag_id` int(10) unsigned NOT NULL,
+  `taggable_id` int(10) unsigned NOT NULL,
+  `taggable_type` varchar(80) NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `taggable_unique` (`tag_id`,`taggable_id`,`user_id`,`taggable_type`),
+  KEY `taggables_tag_id_index` (`tag_id`),
+  KEY `taggables_taggable_id_index` (`taggable_id`),
+  KEY `taggables_taggable_type_index` (`taggable_type`),
+  KEY `taggables_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taggables`
+--
+
+LOCK TABLES `taggables` WRITE;
+/*!40000 ALTER TABLE `taggables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taggables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  `type` varchar(30) NOT NULL DEFAULT 'custom',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tags_name_user_id_type_unique` (`name`,`user_id`,`type`),
+  KEY `tags_type_index` (`type`),
+  KEY `tags_created_at_index` (`created_at`),
+  KEY `tags_updated_at_index` (`updated_at`),
+  KEY `tags_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tags`
+--
+
+LOCK TABLES `tags` WRITE;
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_models`
+--
+
+DROP TABLE IF EXISTS `user_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_models` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `b_user_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_models_model_type_model_id_index` (`model_type`,`model_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_models`
+--
+
+LOCK TABLES `user_models` WRITE;
+/*!40000 ALTER TABLE `user_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_group_user_id_group_id_unique` (`user_id`,`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `avatar_url` varchar(255) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `legacy_permissions` text DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(60) DEFAULT NULL,
+  `two_factor_secret` text DEFAULT NULL,
+  `two_factor_recovery_codes` text DEFAULT NULL,
+  `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
+  `card_brand` varchar(30) DEFAULT NULL,
+  `card_last_four` varchar(4) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `language` varchar(6) DEFAULT NULL,
+  `country` varchar(40) DEFAULT NULL,
+  `timezone` varchar(30) DEFAULT NULL,
+  `avatar` text DEFAULT NULL,
+  `stripe_id` varchar(255) DEFAULT NULL,
+  `paypal_id` varchar(50) DEFAULT NULL,
+  `available_space` bigint(20) unsigned DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `card_expires` varchar(10) DEFAULT NULL,
+  `banned_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  UNIQUE KEY `users_paypal_id_unique` (`paypal_id`),
+  KEY `users_created_at_index` (`created_at`),
+  KEY `users_updated_at_index` (`updated_at`),
+  KEY `users_username_index` (`username`),
+  KEY `users_first_name_index` (`first_name`),
+  KEY `users_last_name_index` (`last_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_projects`
+--
+
+DROP TABLE IF EXISTS `users_projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users_projects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_projects_user_id_project_id_unique` (`user_id`,`project_id`),
+  KEY `users_projects_user_id_index` (`user_id`),
+  KEY `users_projects_project_id_index` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_projects`
+--
+
+LOCK TABLES `users_projects` WRITE;
+/*!40000 ALTER TABLE `users_projects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_projects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_invites`
+--
+
+DROP TABLE IF EXISTS `workspace_invites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_invites` (
+  `id` char(36) NOT NULL,
+  `avatar` varchar(80) DEFAULT NULL,
+  `workspace_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `email` varchar(80) NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspace_invites_workspace_id_index` (`workspace_id`),
+  KEY `workspace_invites_user_id_index` (`user_id`),
+  KEY `workspace_invites_email_index` (`email`),
+  KEY `workspace_invites_role_id_index` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_invites`
+--
+
+LOCK TABLES `workspace_invites` WRITE;
+/*!40000 ALTER TABLE `workspace_invites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_invites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_models`
+--
+
+DROP TABLE IF EXISTS `workspace_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_models` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `workspace_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspace_models_model_type_model_id_index` (`model_type`,`model_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_models`
+--
+
+LOCK TABLES `workspace_models` WRITE;
+/*!40000 ALTER TABLE `workspace_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_user`
+--
+
+DROP TABLE IF EXISTS `workspace_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `workspace_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned DEFAULT NULL,
+  `is_owner` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `workspace_user_workspace_id_user_id_unique` (`workspace_id`,`user_id`),
+  KEY `workspace_user_user_id_index` (`user_id`),
+  KEY `workspace_user_workspace_id_index` (`workspace_id`),
+  KEY `workspace_user_role_id_index` (`role_id`),
+  KEY `workspace_user_is_owner_index` (`is_owner`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_user`
+--
+
+LOCK TABLES `workspace_user` WRITE;
+/*!40000 ALTER TABLE `workspace_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspace_users`
+--
+
+DROP TABLE IF EXISTS `workspace_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspace_users` (
+  `workspace_id` bigint(20) unsigned NOT NULL,
+  `b_user_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  KEY `workspace_users_workspace_id_b_user_id_index` (`workspace_id`,`b_user_id`),
+  KEY `workspace_users_workspace_id_index` (`workspace_id`),
+  KEY `workspace_users_b_user_id_index` (`b_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspace_users`
+--
+
+LOCK TABLES `workspace_users` WRITE;
+/*!40000 ALTER TABLE `workspace_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspace_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workspaces`
+--
+
+DROP TABLE IF EXISTS `workspaces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `workspaces` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `owner_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workspaces_owner_id_index` (`owner_id`),
+  KEY `workspaces_created_at_index` (`created_at`),
+  KEY `workspaces_updated_at_index` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workspaces`
+--
+
+LOCK TABLES `workspaces` WRITE;
+/*!40000 ALTER TABLE `workspaces` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workspaces` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-03-07  2:49:35
